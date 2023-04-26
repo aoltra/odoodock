@@ -1,3 +1,14 @@
+###########################################################
+###################### General Setup ######################
+###########################################################
+
+### Paths #################################################
+
+# Ubicación de los módulos en el host
+APP_MODULE_PATH_HOST=../addons
+# Almacenamiento en el host. Todos los servicios almacenan en el mismo sitio
+DATA_PATH_HOST=~/.odoodock/data
+
 ##########################################################
 ################ Containers Customization #################
 ###########################################################
@@ -7,3 +18,30 @@
 # Version de Odoo.
 # Valores aceptados:  14 - 15
 ODOO_VERSION=14
+
+# Conexión con Postgress
+# La dirección de postgres. Si usamos un contenedor ponemos su nombre
+ODOO_POSTGRESS_HOST=db
+# El rol de postgres con el que Odoo se conectará. Si usamos un
+# contenedor postgres hay que indicar el mismo valor que en POSTGRES_USER
+ODOO_POSTGRESS_USER=odoo
+# El password con el que el usuario ODOO_POSTGRESS_USER se conectará. Si usamos un
+# contenedor postgres hay que indicar el mismo valor que en POSTGRES_PASSWORD.   
+ODOO_POSTGRESS_PASSWORD=odoo
+# El puerto en el que escucha postgres
+ODOO_POSTGRESS_PORT=5432
+
+
+### POSTGRES ##############################################
+
+# Versión e imagen de postgres
+POSTGRES_IMAGE=alpine
+POSTGRES_VERSION=14
+# Nombre de la base de datos por defecto
+POSTGRES_DB=postgres
+# Usuario superusuario
+POSTGRES_USER=odoo
+# Password superusuario postgres
+POSTGRES_PASSWORD=odoo
+# Puerto en el que escucha postgres
+POSTGRES_PORT=5432

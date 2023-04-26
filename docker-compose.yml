@@ -1,1 +1,57 @@
 version: '3.7'
+
+services:
+  #############################
+  ## ODOO #####################
+  #############################
+  # Definimos el servicio Web, en este caso Odoo
+  web:
+    build:
+      # donde está el código pasra construir la imagen
+      context: ./odoo
+      # valores que pueden ser utilizados en la construcción de la imagen
+      args:
+          - ODOO_VERSION=${ODOO_VERSION}
+     
+    # Indicamos que depende de "db", por lo cual debe ser procesada primero "db"
+    depends_on:
+      - db
+
+    # Definimos variables de entorno de Odoo
+    environment:
+      # conexión con Postgress
+      - HOST=${ODOO_POSTGRESS_HOST}
+      - USER=${ODOO_POSTGRESS_USER}
+      - PASSWORD=${ODOO_POSTGRESS_PASSWORD}
+      - PORT=${ODOO_POSTGRESS_PORT}
+
+    # Mapeamos el directorio de los modulos (como por ejemplo" /mnt/extra-addons" )
+    # en un directorio local, por defecto en el carpeta ../addons del directorio 
+    # donde se ejecuta docker-compose
+    volumes:
+      - ${APP_MODULE_PATH_HOST}:/mnt/extra-addons
+      - ${DATA_PATH_HOST}/odoo:/var/lib/odoo
+
+  #################################
+  ## POSTGRES #####################
+  #################################
+  # Definimos el servicio de la base de datos
+  db:
+    build:
+      context: ./postgres
+      args:
+        - POSTGRES_VERSION=${POSTGRES_VERSION}
+        - POSTGRES_IMAGE=${POSTGRES_IMAGE}
+        
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    # Definimos variables de entorno de PostgreSQL
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+
+    # Mapeamos el directorio del contenedor "var/lib/postgresql/data" en un directorio local
+    # por defecto en la carpeta .odoodock del home del usuario
+    volumes:
+      - ${DATA_PATH_HOST}/postgres:/var/lib/postgresql/data
