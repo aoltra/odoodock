@@ -52,8 +52,14 @@ RUN useradd -ms /bin/bash odoo \
 
 USER odoo
 
+# copio el fichero de configuraciones 
+COPY ./odoo.conf /etc/odoo/
+ENV ODOO_RC /etc/odoo/odoo.conf
+
 # puerto por el que escucha conexiones
 EXPOSE 8069
-
+# fichero a ejecutar al arrancar
+ENTRYPOINT ["/entrypoint.sh"]
+# Parámetro del entrypoint
 CMD ["odoo"]
 
