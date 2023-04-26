@@ -52,6 +52,8 @@ RUN useradd -ms /bin/bash odoo \
 
 USER odoo
 
+# puerto por el que escucha conexiones
+EXPOSE 8069
 
 CMD ["odoo"]
 
