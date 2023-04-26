@@ -48,6 +48,9 @@ services:
       - ${APP_MODULE_PATH_HOST}:/mnt/extra-addons
       - ${DATA_PATH_HOST}/odoo:/var/lib/odoo
 
+    # Indica que pasa ese parametro al arrancar el servicio Odoo
+    command: --dev=all 
+
   #################################
   ## POSTGRES #####################
   #################################
