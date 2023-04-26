@@ -8,6 +8,10 @@
 APP_MODULE_PATH_HOST=../addons
 # Almacenamiento en el host. Todos los servicios almacenan en el mismo sitio
 DATA_PATH_HOST=~/.odoodock/data
+# Ubicación de la información del servidor en el host
+SERVER_INFO_PATH_HOST=../.server-info 
+# ubicación en el contenedor de los documentos compartidos para download
+REPO_PATH_CONTAINER=/mnt/odoo-repo
 
 ##########################################################
 ################ Containers Customization #################

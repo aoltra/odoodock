@@ -47,6 +47,9 @@ services:
     volumes:
       - ${APP_MODULE_PATH_HOST}:/mnt/extra-addons
       - ${DATA_PATH_HOST}/odoo:/var/lib/odoo
+      - ${SERVER_INFO_PATH_HOST}/odoo/config:/etc/odoo
+      - ${SERVER_INFO_PATH_HOST}/odoo/logs:/var/log/odoo
+      - ${SERVER_INFO_PATH_HOST}/odoo/repo:${REPO_PATH_CONTAINER}
 
     # Indica que pasa ese parametro al arrancar el servicio Odoo
     command: --dev=all 
