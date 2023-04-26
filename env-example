@@ -19,6 +19,15 @@ DATA_PATH_HOST=~/.odoodock/data
 # Valores aceptados:  14 - 15
 ODOO_VERSION=14
 
+ODOO_SHELL_OH_MY_ZSH=false
+ODOO_INSTALL_SSH=false
+ODOO_INSTALL_GIT=false
+ODOO_INSTALL_SSL_DEV=false
+ODOO_INSTALL_PDFTK=false
+ODOO_PORT=8069
+ODOO_SSH_PORT=2222
+
+
 # Conexión con Postgress
 # La dirección de postgres. Si usamos un contenedor ponemos su nombre
 ODOO_POSTGRESS_HOST=db

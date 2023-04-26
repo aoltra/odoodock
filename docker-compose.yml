@@ -12,7 +12,22 @@ services:
       # valores que pueden ser utilizados en la construcción de la imagen
       args:
           - ODOO_VERSION=${ODOO_VERSION}
-     
+          - ODOO_SHELL_OH_MY_ZSH=${ODOO_SHELL_OH_MY_ZSH}
+          - ODOO_INSTALL_GIT=${ODOO_INSTALL_GIT}
+          - ODOO_INSTALL_SSH=${ODOO_INSTALL_SSH}
+          - ODOO_INSTALL_SSL_DEV=${ODOO_INSTALL_SSL_DEV}
+       
+    # Port Mapping: indicamos que el puerto 8069 del contenedor se mapeara con 
+    # el puerto ODOO_PORT en el anfritrion
+    # Permitiendo acceder a Odoo mediante http://localhost:ODOO_PORT
+    # Además mapeamos el puerto 22 para ssh
+    ports:
+      - "${ODOO_SSH_PORT}:22"
+      - "${ODOO_PORT}:8069"
+
+    # permito tener el contenedor vivo. Al eliminar el punto de entrada una vez arranca se para
+    # con tty: true puedo entrar y trabajar sobre él.
+    # tty: true
     # Indicamos que depende de "db", por lo cual debe ser procesada primero "db"
     depends_on:
       - db
