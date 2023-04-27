@@ -58,6 +58,7 @@ ENV ODOO_RC /etc/odoo/odoo.conf
 
 # puerto por el que escucha conexiones
 EXPOSE 8069
+
 # fichero a ejecutar al arrancar
 ENTRYPOINT ["/entrypoint.sh"]
 # Parámetro del entrypoint

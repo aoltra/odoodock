@@ -41,7 +41,7 @@ services:
       - PASSWORD=${ODOO_POSTGRESS_PASSWORD}
       - PORT=${ODOO_POSTGRESS_PORT}
 
-    # Mapeamos el directorio de los modulos (como por ejemplo" /mnt/extra-addons" )
+    # Mapeamos el directorio de los modulos (como por ejemplo "/mnt/extra-addons")
     # en un directorio local, por defecto en el carpeta ../addons del directorio 
     # donde se ejecuta docker-compose
     volumes:
@@ -51,7 +51,7 @@ services:
       - ${SERVER_INFO_PATH_HOST}/odoo/logs:/var/log/odoo
       - ${SERVER_INFO_PATH_HOST}/odoo/repo:${REPO_PATH_CONTAINER}
 
-    # Indica que pasa ese parametro al arrancar el servicio Odoo
+    # Indica que pasa ese parámetro al arrancar el servicio Odoo
     command: --dev=all 
 
   #################################
