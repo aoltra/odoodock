@@ -34,7 +34,7 @@ RUN if [ ${ODOO_INSTALL_SSH} = true ]; then \
 # instalación pdftk
 ARG ODOO_INSTALL_PDFTK=false
 RUN if [ ${ODOO_INSTALL_PDFTK} = true ]; then \
-    apt-get install -y --no-install-recomends \ 
+    apt-get install -y \ 
     pdftk \
 ;fi
 
