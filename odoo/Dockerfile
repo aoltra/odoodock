@@ -45,15 +45,13 @@ RUN if [ ${ODOO_INSTALL_SSL_DEV} = true ]; then \
     python3-dev build-essential libcurl4-openssl-dev libssl-dev \
 ;fi
 
-# Se crea un usuario odoo junto con su directorio home
-# y asigno permisos
-RUN useradd -ms /bin/bash odoo \
-    && chown -R odoo:odoo /etc/odoo /var/log/odoo
+# Asigno permisos a los los y al fichero de configuración
+RUN chown -R odoo:odoo /etc/odoo /var/log/odoo
 
 USER odoo
 
 # copio el fichero de configuraciones 
-COPY ./odoo.conf /etc/odoo/
+COPY odoo.conf /etc/odoo/
 ENV ODOO_RC /etc/odoo/odoo.conf
 
 # puerto por el que escucha conexiones

@@ -1,5 +1,19 @@
 version: '3.7'
 
+# Definimos un volumen nombrado (odoo-comf) pero que este enlazado a una
+# carpeta. De esta manera es posible realizar copias sobre él desde el host
+# en la construcción de la imagen y además posteriormente acceder a ellas 
+# desde el host.
+# Un volumen enlazado directamente host:contenedor elimina todo lo que 
+# haya en esa carpeta del contenedor 
+volumes:
+  odoo-conf:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: ${SERVER_INFO_PATH_HOST}/odoo/config
+      
 services:
   #############################
   ## ODOO #####################
@@ -47,9 +61,10 @@ services:
     volumes:
       - ${APP_MODULE_PATH_HOST}:/mnt/extra-addons
       - ${DATA_PATH_HOST}/odoo:/var/lib/odoo
-      - ${SERVER_INFO_PATH_HOST}/odoo/config:/etc/odoo
+      - odoo-conf:/etc/odoo
       - ${SERVER_INFO_PATH_HOST}/odoo/logs:/var/log/odoo
       - ${SERVER_INFO_PATH_HOST}/odoo/repo:${REPO_PATH_CONTAINER}
+      - ${SERVER_INFO_PATH_HOST}/odoo/home:/home/odoo
 
     # Indica que pasa ese parámetro al arrancar el servicio Odoo
     command: --dev=all 
