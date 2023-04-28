@@ -11,8 +11,8 @@ Odoodock es un entorno de desarrollo de Odoo para Docker que sigue la idea propu
   - MariaDB
 - Imágenes de los servicios basadas en la imagen oficial.
 - Cada servicio corre en un propio contenedor.
-- Permite el desarrollo desde dentro del contenedor de odoo
-- Fácilmente configurable a través de variables de entorno
+- Permite el desarrollo desde dentro del contenedor de odoo.
+- Fácilmente configurable a través de variables de entorno.
 
 ## Cómo empezar
 
@@ -23,3 +23,4 @@ Odoodock es un entorno de desarrollo de Odoo para Docker que sigue la idea propu
 
 ## Licencia
 
+Odoodock se distribuye bajo licencia GPL 3. Más información en [LICENSE](LICENSE)
