@@ -42,7 +42,7 @@ services:
 
     # permito tener el contenedor vivo. Al eliminar el punto de entrada una vez arranca se para
     # con tty: true puedo entrar y trabajar sobre él.
-    # tty: true
+    tty: true
     # Indicamos que depende de "db", por lo cual debe ser procesada primero "db"
     depends_on:
       - db
@@ -65,9 +65,6 @@ services:
       - ${SERVER_INFO_PATH_HOST}/odoo/logs:/var/log/odoo
       - ${SERVER_INFO_PATH_HOST}/odoo/repo:${REPO_PATH_CONTAINER}
       - ${SERVER_INFO_PATH_HOST}/odoo/home:/home/odoo
-
-    # Indica que pasa ese parámetro al arrancar el servicio Odoo
-    command: --dev=all 
 
   #################################
   ## POSTGRES #####################

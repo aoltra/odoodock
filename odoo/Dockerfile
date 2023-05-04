@@ -45,20 +45,36 @@ RUN if [ ${ODOO_INSTALL_SSL_DEV} = true ]; then \
     python3-dev build-essential libcurl4-openssl-dev libssl-dev \
 ;fi
 
-# Asigno permisos a los los y al fichero de configuración
+# instalacion del módulo debugpy
+RUN pip3 install debugpy
+
+# Asigno permisos al directorio de configuración
+# y al de logs
 RUN chown -R odoo:odoo /etc/odoo /var/log/odoo
 
-USER odoo
+#USER odoo
 
 # copio el fichero de configuraciones 
 COPY odoo.conf /etc/odoo/
 ENV ODOO_RC /etc/odoo/odoo.conf
 
+# copio fichero de arranque de odoo
+COPY ./runodoo.sh /
+RUN chmod 770 /runodoo.sh
+
+# copio el fichero de configuraciones de ejecución de python
+# y las extensiones recomendadas
+RUN mkdir /mnt/extra-addons/.vscode
+COPY ./.vscode/launch.json /mnt/extra-addons/.vscode
+COPY ./.vscode/extensions.json /mnt/extra-addons/.vscode
+
 # puerto por el que escucha conexiones
 EXPOSE 8069
 
 # fichero a ejecutar al arrancar
-ENTRYPOINT ["/entrypoint.sh"]
+#ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT []
 # Parámetro del entrypoint
-CMD ["odoo"]
+#CMD ["odoo"]
+CMD ["/bin/bash"]
 
