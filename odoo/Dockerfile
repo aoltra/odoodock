@@ -63,18 +63,20 @@ COPY ./runodoo.sh /
 RUN chmod 770 /runodoo.sh
 
 # copio el fichero de configuraciones de ejecución de python
-# y las extensiones recomendadas
 RUN mkdir /mnt/extra-addons/.vscode
 COPY ./.vscode/launch.json /mnt/extra-addons/.vscode
-COPY ./.vscode/extensions.json /mnt/extra-addons/.vscode
+
+COPY ./entrypoint.sh /entrypoint.sh
+RUN chmod 770 /entrypoint.sh
 
 # puerto por el que escucha conexiones
 EXPOSE 8069
 
 # fichero a ejecutar al arrancar
-#ENTRYPOINT ["/entrypoint.sh"]
-ENTRYPOINT []
+ENTRYPOINT ["/entrypoint.sh"]
 # Parámetro del entrypoint
-#CMD ["odoo"]
-CMD ["/bin/bash"]
+# Son pasados posteriormente a odoo por lo que podria servir
+# para arrancar odoo con parametros no incluidos en enviroment
+# por ejemplo CMD ["--pidfile=/odoo.pid"]
+CMD []
 

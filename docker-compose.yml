@@ -79,6 +79,7 @@ services:
         
     ports:
       - "${POSTGRES_PORT}:5432"
+      
     # Definimos variables de entorno de PostgreSQL
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
