@@ -20,7 +20,7 @@ REPO_PATH_CONTAINER=/mnt/odoo-repo
 ### ODOO #############################################
 
 # Version de Odoo.
-# Valores aceptados:  14 - 15
+# Valores aceptados:  14
 ODOO_VERSION=14
 
 ODOO_SHELL_OH_MY_ZSH=false
