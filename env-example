@@ -56,3 +56,57 @@ POSTGRES_USER=odoo
 POSTGRES_PASSWORD=odoo
 # Puerto en el que escucha postgres
 POSTGRES_PORT=5432
+
+### MOODLE ##############################################
+
+# Version de Moodle.
+MOODLE_VERSION=3.9.2
+
+MOODLE_PORT=80
+MOODLE_SSL_PORT=443
+
+# Usuario administrador
+MOODLE_USERNAME=moodle
+# Password administrador
+MOODLE_PASSWORD=secret
+
+# tipo de BBDD
+MOODLE_DATABASE_TYPE=mariadb
+# Hostname BBDD
+MOODLE_DATABASE_HOST=mariadb-moodle
+# Puerto BBDD
+MOODLE_DATABASE_PORT_NUMBER=3306
+
+# Nombre de la bbdd que Moodle usa para conectarse
+MOODLE_DATABASE_NAME=odoo_moodle_db
+# Nombre del usuario de la bbdd que Moodle usa para conectarse
+MOODLE_DATABASE_USER=odoo_moodle
+# Password del usuario de la bbdd que Moodle usa para conectarse
+MOODLE_DATABASE_PASSWORD=secret
+
+# Pemite contraseñas vacias. No es recomendable y mucho menos en producción
+MOODLE_ALLOW_EMPTY_PASSWORD=no
+
+### MARIADB MOODLE ##############################################
+
+# Versión de MariaDB.
+MARIADB_MOODLE_VERSION=10.6
+
+# Pemite contraseñas vacias. No es recomendable y mucho menos en producción
+MARIADB_MOODLE_ALLOW_EMPTY_PASSWORD=no
+# Password para el administrador (root). 
+# Si MARIADB_MOODLE_ALLOW_EMPTY_PASSWORD es no, debe ser definido
+MARIADB_MOODLE_ROOT_PASSWORD=secret
+
+# usuario que se crea al lanzar el contenedor
+# ha de coincidir con MOODLE_DATABASE_USER
+MARIADB_MOODLE_USER=odoo_moodle
+# ha de coincidir con MOODLE_DATABASE_PASSWORD
+MARIADB_MOODLE_PASSWORD=secret
+# ha de coincidir con MOODLE_DATABASE_NAME
+MARIADB_MOODLE_DATABASE=odoo_moodle_db
+
+# juego de caracteres por defecto
+MARIADB_MOODLE_CHARACTER_SET=utf8mb4
+# patrón de bits para la identificación de caracteres
+MARIADB_MOODLE_COLLATE=utf8mb4_unicode_ci
