@@ -66,13 +66,19 @@ Odoodock es un entorno de desarrollo de Odoo para Docker que sigue la idea propu
 
    > El servicio _web_ es obligatorio para arrancar _odoo_
 
-7. Arrancar los servicios
+7. Asignar permisos de ejecución para el usuario al fichero _up.sh_
+
+   ```
+   chmod u+x ./up.sh
+   ```
+
+8. Arrancar los servicios
 
    ```
    ./up.sh
    ```
 
-8. Para comprobar que todo ha ido correctamente, acceder desde un navegador a _localhost:8069_, donde debe aparecer la página del selector de la base de datos.
+9. Para comprobar que todo ha ido correctamente, acceder desde un navegador a _localhost:8069_, donde debe aparecer la página del selector de la base de datos.
 
 <center>
 
@@ -80,13 +86,44 @@ Odoodock es un entorno de desarrollo de Odoo para Docker que sigue la idea propu
 
 </center>
 
-9. Configurar los valores y crear la base de datos
+10. Configurar los valores y crear la base de datos
 
    > Es recomendable almacenar el _master password_ en un fichero aparte
 
-10. Si todo ha ido correctamente, una vez finalizada la creación de la base de datos, deberá cargarse en el navegador la página _Aplicaciones_
+11. Si todo ha ido correctamente, una vez finalizada la creación de la base de datos, deberá cargarse en el navegador la página _Aplicaciones_
 
 ![Selector base de datos](./DOCUMENTATION/static/odoo_app_init.png)
+
+### Insertando módulos
+
+A. Crear un módulo con _odoo scaffold _
+
+1. Entrar en el contenedor web. Para ello desde la carpeta _odoodock_ ejecutar:
+
+   ```
+   docker exec -it odoodock_web_1 bash
+   ```
+
+2. Dentro del contenedor ejecutar:
+
+   ```
+   odoo scaffold [nombre_del_modulo] /mnt/extra-addons
+   ```
+
+B. Clonar un módulo desde un repo existente
+
+1. Entrar en el contenedor web. Para ello desde la carpeta _odoodock_ ejecutar:
+
+   ```
+   docker exec -it odoodock_web_1 bash
+   ```
+2. Dentro del contenedor, ir a la carpeta _/mnt/extra-addons_ y ejecutar:
+
+   ```
+   git clone [url_repo]
+   ```
+
+   > Si el repo es público y todavía no se ha configurado el acceso por _ssh_, lo mejor es utilizar _https_.
 
 
 
