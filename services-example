@@ -1,0 +1,13 @@
+#######################################################
+# servicios a arrancar / services to be started up
+########################################################
+
+# servicios disponibles / available services:
+# web, moodle
+
+# Array de servicios
+SERVICES=(
+  "web"
+  "moodle"
+)
+
