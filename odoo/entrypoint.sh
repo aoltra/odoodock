@@ -4,7 +4,7 @@ if [ -v PASSWORD_FILE ]; then
     PASSWORD="$(< $PASSWORD_FILE)"
 fi
 
-# En caso de que no se hay adefinido en envoriment de docker los parámetros de la bse de datos
+# En caso de que no se haya definido en enviroment de docker los parámetros de la base de datos
 # los asigna a partir de DB_PORT_5432_TCP_ADDR, DB_PORT_5432_TCP_PORT
 # DB_ENV_POSTGRES_USER y DB_ENV_POSTGRES_PASSWORD y en caso de que no estén 
 # los toma por defecto

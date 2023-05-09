@@ -1,6 +1,6 @@
 version: '3.7'
 
-# Definimos un volumen nombrado (odoo-comf) pero que este enlazado a una
+# Definimos dos volumenes nombrado (odoo_conf) pero que esté enlazado a una
 # carpeta. De esta manera es posible realizar copias sobre él desde el host
 # en la construcción de la imagen y además posteriormente acceder a ellas 
 # desde el host.
@@ -13,6 +13,14 @@ volumes:
       type: 'none'
       o: 'bind'
       device: ${SERVER_INFO_PATH_HOST}/odoo/config
+
+  odoo_addons:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: ${APP_MODULE_PATH_HOST}
+      
   mariadb_data:
     driver: local
 
@@ -51,6 +59,7 @@ services:
     # permito tener el contenedor vivo. Al eliminar el punto de entrada una vez arranca se para
     # con tty: true puedo entrar y trabajar sobre él.
     tty: true
+
     # Indicamos que depende de "db", por lo cual debe ser procesada primero "db"
     depends_on:
       - db
@@ -67,7 +76,7 @@ services:
     # en un directorio local, por defecto en el carpeta ../addons del directorio 
     # donde se ejecuta docker-compose
     volumes:
-      - ${APP_MODULE_PATH_HOST}:/mnt/extra-addons
+      - odoo_addons:/mnt/extra-addons
       - ${DATA_PATH_HOST}/odoo:/var/lib/odoo
       - ${SERVER_INFO_PATH_HOST}/odoo/logs:/var/log/odoo
       - ${SERVER_INFO_PATH_HOST}/odoo/repo:${REPO_PATH_CONTAINER}

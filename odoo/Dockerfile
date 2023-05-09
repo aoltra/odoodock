@@ -64,7 +64,7 @@ RUN chmod 770 /runodoo.sh
 
 # copio el fichero de configuraciones de ejecución de python
 RUN mkdir /mnt/extra-addons/.vscode
-COPY ./.vscode/launch.json /mnt/extra-addons/.vscode
+COPY ./.vscode/launch.json /mnt/extra-addons/.vscode/launch.json
 
 COPY ./entrypoint.sh /entrypoint.sh
 RUN chmod 770 /entrypoint.sh
