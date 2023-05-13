@@ -5,12 +5,12 @@
 ### Paths #################################################
 
 # Ubicación de los módulos en el host
-APP_MODULE_PATH_HOST=../addons
+APP_MODULE_PATH_HOST=${PWD}/../addons
 # Almacenamiento en el host. Todos los servicios se almacenan en el mismo sitio
 DATA_PATH_HOST=~/.odoodock/data
 # Ubicación de la información del servidor en el host
-# HACK: en algunas versiones de Docker no es capaz de crear un volumen nombrado ya que 
-# no encuentra el directorio si se define como una ruta relativa
+# HACK: en algunas versiones de Docker no son capaces de crear un volumen nombrado ya que 
+# no encuentran el directorio si se define como una ruta relativa
 # ${PWD} almacena el valor de la ruta actual, por lo que permite convertirlo en una ruta absoluta
 SERVER_INFO_PATH_HOST=${PWD}/../.server-info 
 # ubicación en el contenedor de los documentos compartidos para download
@@ -27,8 +27,8 @@ REPO_PATH_CONTAINER=/mnt/odoo-repo
 ODOO_VERSION=14
 
 ODOO_SHELL_OH_MY_ZSH=false
-ODOO_INSTALL_SSH=false
-ODOO_INSTALL_GIT=false
+ODOO_INSTALL_SSH=true
+ODOO_INSTALL_GIT=true
 ODOO_INSTALL_SSL_DEV=false
 ODOO_INSTALL_PDFTK=false
 ODOO_PORT=8069
