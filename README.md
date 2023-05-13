@@ -10,19 +10,23 @@ Odoodock es un entorno de desarrollo de Odoo para Docker que sigue la idea propu
   - Moodle
   - MariaDB (para Moodle)
 - Cada servicio corre en un propio contenedor.
+- Scripts para la generación automática de módulos por _scaffolding_, clonado de repositorios _git_, descompresión de paquetes
 - Permite el desarrollo desde dentro del contenedor de Odoo.
 - Configuración de serie para realizar depuración en Visual Studio Code
 - Fácilmente configurable a través de variables de entorno.
 - Pensado con fines académicos: código muy comentado
-- Soporte para versión 14
+- Soporte para Odoo versión 14
 
 ## Cómo empezar
 
-### Requerimientos
+### Requisitos
 
 - [git](https://git-scm.com/downloads)
-- [docker compose](https://docs.docker.com/compose/)
 - [Visual Studio Code](https://code.visualstudio.com/)
+- [Docker]
+   - Opción 1: [Docker Engine](https://docs.docker.com/engine/) >= 23.0.0 con [Docker Compose plugin](https://docs.docker.com/compose/) >= 2.17.0
+   - Opción 2: [Docker Desktop](https://docs.docker.com/desktop/)
+
 
 ### Instalación
 
@@ -66,10 +70,11 @@ Odoodock es un entorno de desarrollo de Odoo para Docker que sigue la idea propu
 
    > El servicio _web_ es obligatorio para arrancar _odoo_
 
-7. Asignar permisos de ejecución para el usuario al fichero _up.sh_
+7. Asignar permisos de ejecución para el usuario al fichero _up.sh_ y _create-modules.sh_
 
    ```
    chmod u+x ./up.sh
+   chmod u+x ./create-modules.sh
    ```
 
 8. Arrancar los servicios
@@ -94,38 +99,56 @@ Odoodock es un entorno de desarrollo de Odoo para Docker que sigue la idea propu
 
 ![Selector base de datos](./DOCUMENTATION/static/odoo_app_init.png)
 
-### Insertando módulos
+### Creando módulos
 
-A. Crear un módulo con _odoo scaffold _
+#### O1. Crear un módulo con _odoo scaffold_
 
-1. Entrar en el contenedor web. Para ello desde la carpeta _odoodock_ ejecutar:
-
+   Ejecutar el script _create-module.sh_ con la opción _-s_. Por ejemplo, desde la carpeta _odoodock_
+     
    ```
-   docker exec -it odoodock_web_1 bash
-   ```
-
-2. Dentro del contenedor ejecutar:
-
-   ```
-   odoo scaffold [nombre_del_modulo] /mnt/extra-addons
+   ./create-module.sh -s mimodulo
    ```
 
-B. Clonar un módulo desde un repo existente
+#### O2. Clonar un módulo desde un repo existente
 
-1. Entrar en el contenedor web. Para ello desde la carpeta _odoodock_ ejecutar:
-
+   Ejecutar el script _create-module.sh_ con la opción _-g_. Por ejemplo, desde la carpeta _odoodock_
+     
    ```
-   docker exec -it odoodock_web_1 bash
-   ```
-2. Dentro del contenedor, ir a la carpeta _/mnt/extra-addons_ y ejecutar:
-
-   ```
-   git clone [url_repo]
+   ./create-module.sh -g https://github.com/user/mimodulo.git
    ```
 
-   > Si el repo es público y todavía no se ha configurado el acceso por _ssh_, lo mejor es utilizar _https_.
+   > Si el repo es público y todavía no se ha configurado el acceso por _ssh_, lo más rápido es utilizar _https_. Si el acceso se quiere realizar por ssh será necesario configurarlo. Más información en [Configuración git/ssh]()
+
+#### O3. Crear un módulo a partir de un fichero zip
+
+   Ejecutar el script _create-module.sh_ con la opción _-z_. Por ejemplo, desde la carpeta _odoodock_
+     
+   ```
+   ./create-module.sh -z ~/downloads/mimodulo.zip
+   ```
+
+   > Para el funcionamiento correcto de esta opción es necesario que en el host esté instalado _unzip_
 
 
+
+> En cualquier caso siempre es posible entrar dentro del contendor _odoodck-web-1_ y ejecutar los comandos necesarios. Por ejemplo: 
+>   ```
+>   $ docker exec -it odoodock_web_1 bash
+>   > odoo scaffold [nombre_del_modulo] /mnt/extra-addons
+>   ```
+>   o 
+>
+>   ```
+>   $ docker exec -it odoodock_web_1 bash
+>   > git clone [url_repo]
+>   ```
+> En estos casos es hay que tener en en cuenta que es posible que el contenedor pare su ejecución ya que el proceso que se ejecuta es interrumpido. Al cabo de unos segundos debería volver a reiniciarse de manera automática, aunque siempre es posible forzar el reinicio con _docker compose up -d web_
+
+### Configuración git/ssh
+
+Tanto la instalación de _git_ como la de _ssh_ se configuran desde fichero _.env_ (por defecto se realizan ambas). 
+
+Para realizar la conexión con el remoto es necesario que en el _home_ del contenedor se almacenen las claves privadas del usuario
 
 ## Licencia
 
