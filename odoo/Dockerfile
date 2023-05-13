@@ -18,14 +18,14 @@ RUN if [ ${ODOO_SHELL_OH_MY_ZSH} = true ]; then \
 ;fi
 
 # instalación git
-ARG ODOO_INSTALL_GIT=false
+ARG ODOO_INSTALL_GIT=true
 RUN if [ ${ODOO_INSTALL_GIT} = true ]; then \
     apt-get install -y --no-install-recommends \
     git \
 ;fi
 
 # instalación ssh
-ARG ODOO_INSTALL_SSH=false
+ARG ODOO_INSTALL_SSH=true
 RUN if [ ${ODOO_INSTALL_SSH} = true ]; then \
     apt-get install -y --no-install-recommends \
     ssh \
