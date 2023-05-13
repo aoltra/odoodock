@@ -16,4 +16,4 @@ test ! -f ./.services && echo -e "\033[0;32m[INFO]\033[0m No existe el fichero .
 test -z $SERVICES && echo -e "\033[0;32m[INFO]\033[0m Variable SERVICES no definida o sin servicios en .services.  Arrancando todos los servicios"
 
 echo -e "\033[0;32m[INFO]\033[0m Arrancando los servicios: ${SERVICES[@]}"
-exec docker-compose up "$@" "${SERVICES[@]}"
+exec docker compose up -d "$@" "${SERVICES[@]}"
