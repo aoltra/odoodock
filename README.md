@@ -182,6 +182,43 @@ donde _id_rsa_ es el fichero que contiene la clave privada del usuario.
 
 ## Depuración de código con VSCode
 
+## Trabajando con los contenedores
+
+### Parada
+
+```
+$ docker compose down
+```
+
+### Reconstrucción
+
+Para reconstruir los contenedores a partir de los Dockerfile:
+
+```
+$ ./up.sh --build
+```
+
+### Mostrar logs
+
+**O1. Mostrar los logs de todos los servicios arrancados**
+
+```
+$ docker composer logs
+```
+
+**O2. Mostrar en vivo los logs de todos los servicios arrancados**
+
+```
+$ docker composer logs --follow
+```
+
+**O3. Mostrar en vivo los logs de un único contenedor**
+
+Por ejemplo, para el contenedor _odoodock-web-1_
+
+```
+$ docker logs --follow odoodock-web-1
+```
 
 
 ## Licencia
