@@ -101,9 +101,15 @@
 
 ![Selector base de datos](./DOCUMENTATION/static/odoo_app_init.png)
 
-### Creando módulos
+## Creando módulos
 
-#### O1. Crear un módulo con _odoo scaffold_
+Existen dos opciones: mediante el uso de _create-module.sh_ o mediante el uso directo de comandos docker.
+
+### Usando el script _create-module.sh_
+
+_create-module.sh_ permite la creación desde fuera del contenedor de un módulo de diferentes formas: a través de la opción scaffold, desde un repo remoto medienta la extracción de un fichero .zip
+
+**O1. Crear un módulo con _odoo scaffold_**
 
    Ejecutar el script _create-module.sh_ con la opción _-s_. Por ejemplo, desde la carpeta _odoodock_
      
@@ -111,7 +117,7 @@
    $ ./create-module.sh -s mimodulo
    ```
 
-#### O2. Clonar un módulo desde un repo existente
+**O2. Clonar un módulo desde un repo existente**
 
    Ejecutar el script _create-module.sh_ con la opción _-g_. Por ejemplo, desde la carpeta _odoodock_
      
@@ -119,9 +125,9 @@
    $ ./create-module.sh -g https://github.com/user/mimodulo.git
    ```
 
-   > Si el repo es público y todavía no se ha configurado el acceso por _ssh_, lo más rápido es utilizar _https_. Si el acceso se quiere realizar por ssh será necesario configurarlo. Más información en [Configuración git/ssh](#configuración-gitssh)
+   > Si el repo es público y todavía no se ha configurado el acceso por _ssh_, lo más rápido es utilizar _https_. Si el acceso se quiere realizar por _ssh_ será necesario configurarlo. Más información en [Configuración git/ssh](#configuración-gitssh)
 
-#### O3. Crear un módulo a partir de un fichero zip
+**O3. Crear un módulo a partir de un fichero zip**
 
    Ejecutar el script _create-module.sh_ con la opción _-z_. Por ejemplo, desde la carpeta _odoodock_
      
@@ -131,21 +137,38 @@
 
    > Para el funcionamiento correcto de esta opción es necesario que en el host esté instalado _unzip_
 
+### Mediante comandos docker
 
-> En cualquier caso siempre es posible entrar dentro del contendor _odoodck-web-1_ y ejecutar los comandos necesarios. Por ejemplo: 
->   ```
->   $ docker exec -it odoodock-web-1 bash
->   > odoo scaffold [nombre_del_modulo] /mnt/extra-addons
->   ```
->   o 
->
->   ```
->   $ docker exec -it odoodock-web-1 bash
->   > git clone [url_repo]
->   ```
-> En estos casos es hay que tener en en cuenta que es posible que el contenedor pare su ejecución ya que el proceso que se ejecuta es interrumpido. Al cabo de unos segundos debería volver a reiniciarse de manera automática, aunque siempre es posible forzar el reinicio con _docker compose up -d web_
+Siempre es posible entrar dentro del contendor _odoodck-web-1_ y ejecutar los comandos necesarios.
 
-### Configuración git/ssh
+> ¡Atención!. La ejecución de estos comandos requiere que el proceso de depuración esté en marcha. En caso contrario hay que tener en en cuenta que es posible que el contenedor pare su ejecución ya que el proceso que se ejecuta es interrumpido. Al cabo de unos segundos debería volver a reiniciarse de manera automática, aunque siempre es posible forzar el reinicio con _docker compose up -d web_
+
+**O1. Crear un módulo con _odoo scaffold_**
+
+   ```
+   $ docker exec -it odoodock-web-1 bash
+   > odoo scaffold [nombre_del_modulo] /mnt/extra-addons
+   ```
+**O2. Clonar un módulo desde un repo existente**
+
+   ```
+   $ docker exec -it odoodock-web-1 bash
+   > cd /mnt/extra-addons
+   > git clone [url_repo]
+   ```
+> Si el repo es público y todavía no se ha configurado el acceso por _ssh_, lo más rápido es utilizar _https_. Si el acceso se quiere realizar por _ssh_ será necesario configurarlo. Más información en [Configuración git/ssh](#configuración-gitssh)
+
+**O3. Crear un módulo a partir de un fichero zip**
+
+   ```
+   $ docker cp [nombre_del_modulo].zip odoodock-web-1:/mnt/extra-addons
+   $ docker exec -it odoodock-web-1 bash
+   > cd /mnt/extra-addons
+   > unzip [nombre_del_modulo].zip
+   ```
+
+
+## Configuración git/ssh
 
 Tanto la instalación de _git_ como la de _ssh_ se configuran desde fichero _.env_ (por defecto se realizan ambas). 
 
@@ -156,6 +179,10 @@ $ docker cp ~/.ssh/id_rsa odoodock-web-1:/var/lib/odoo/.ssh
 $ docker run --rm --entrypoint /bin/bash -v odoodock_odoo_data:/var/lib/odoo odoodock-web -c "chown odoo:odoo /var/lib/odoo/.ssh/id_rsa"
 ```
 donde _id_rsa_ es el fichero que contiene la clave privada del usuario.
+
+## Depuración de código con VSCode
+
+
 
 ## Licencia
 
