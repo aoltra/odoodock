@@ -54,18 +54,18 @@
    $ cd odoodock
    ```
 
-4. Copiar el fichero _env-example_ a _.env_
+4. Copiar el fichero _.env-example_ a _.env_
 
    ```
-   $ cp env-example .env
+   $ cp .env-example .env
    ```
 
 4. Modificar el fichero _.env_ para adapartalo a nuestras necesidades   
 
-5. Copiar el fichero _services-example_ a _.services_
+5. Copiar el fichero _.services-example_ a _.services_
 
    ```
-   $ cp services-example .services
+   $ cp .services-example .services
    ```
 
 6. Modificar el fichero _.services_ para incluir los servicios que deseamos arrancar. Los servicios se separan por espacios y van entrecomillados. 
