@@ -60,7 +60,7 @@ else
   echo -e "\033[0;32m[OK]\033[0m Volumen odoodock_oodo_addons encontrado."
 fi
 
-# comprobación de si el contenedor odoodock_web está arrancado
+# comprobación de si el contenedor odoodock-web está arrancado
 # y en ese caso se pausa
 CONTAINER_RUNNING=0
 docker compose ps 2>/dev/null | grep -q odoodock-web
@@ -79,7 +79,7 @@ fi
 
 # ejecución de la operación
 echo -e "\033[0;32m[INFO]\033[0m Ejecutando acción -> contenedor create_module_odoo"
-error_msg=`trap 'docker run --rm -u odoo --workdir="/mnt/extra-addons" --entrypoint /bin/bash --name create_module_odoo -v odoodock_odoo_addons:/mnt/extra-addons -v odoodock_odoo_data:/var/lib/odoo odoodock_web -c "$command"' EXIT`
+error_msg=`trap 'docker run --rm -u odoo --workdir="/mnt/extra-addons" --entrypoint /bin/bash --name create_module_odoo -v odoodock_odoo_addons:/mnt/extra-addons -v odoodock_odoo_data:/var/lib/odoo odoodock-web -c "$command"' EXIT`
 
 # comprobación del código de error de salida
 if [ "$?" -ne 0 ]; then

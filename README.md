@@ -134,13 +134,13 @@
 
 > En cualquier caso siempre es posible entrar dentro del contendor _odoodck-web-1_ y ejecutar los comandos necesarios. Por ejemplo: 
 >   ```
->   $ docker exec -it odoodock_web_1 bash
+>   $ docker exec -it odoodock-web-1 bash
 >   > odoo scaffold [nombre_del_modulo] /mnt/extra-addons
 >   ```
 >   o 
 >
 >   ```
->   $ docker exec -it odoodock_web_1 bash
+>   $ docker exec -it odoodock-web-1 bash
 >   > git clone [url_repo]
 >   ```
 > En estos casos es hay que tener en en cuenta que es posible que el contenedor pare su ejecución ya que el proceso que se ejecuta es interrumpido. Al cabo de unos segundos debería volver a reiniciarse de manera automática, aunque siempre es posible forzar el reinicio con _docker compose up -d web_
@@ -153,7 +153,7 @@ En general, la forma más sencilla de trabajar con un remoto es mediante _ssh_. 
 
 ```
 $ docker cp ~/.ssh/id_rsa odoodock-web-1:/var/lib/odoo/.ssh
-$ docker run --rm --entrypoint /bin/bash -v odoodock_odoo_data:/var/lib/odoo odoodock_web -c "chown odoo:odoo /var/lib/odoo/.ssh/id_rsa"
+$ docker run --rm --entrypoint /bin/bash -v odoodock_odoo_data:/var/lib/odoo odoodock-web -c "chown odoo:odoo /var/lib/odoo/.ssh/id_rsa"
 ```
 donde _id_rsa_ es el fichero que contiene la clave privada del usuario.
 
