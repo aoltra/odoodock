@@ -72,11 +72,11 @@
 
    > El servicio _web_ es obligatorio para arrancar _odoo_
 
-7. Asignar permisos de ejecución para el usuario al fichero _up.sh_ y _create-modules.sh_
+7. Asignar permisos de ejecución para el usuario al fichero _up.sh_ y _create-module.sh_
 
    ```
    $ chmod u+x ./up.sh
-   $ chmod u+x ./create-modules.sh
+   $ chmod u+x ./create-module.sh
    ```
 
 8. Arrancar los servicios
