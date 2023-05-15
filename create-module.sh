@@ -77,9 +77,9 @@ if [ "$?" -eq 0 ]; then
     fi
 fi
 
-# ejecución de la operacióN
+# ejecución de la operación
 echo -e "\033[0;32m[INFO]\033[0m Ejecutando acción -> contenedor create_module_odoo"
-error_msg=`trap 'docker run --rm --workdir="/mnt/extra-addons" --entrypoint /bin/bash --name create_module_odoo -v odoodock_odoo_addons:/mnt/extra-addons odoodock_web -c "$command"' EXIT`
+error_msg=`trap 'docker run --rm -u odoo --workdir="/mnt/extra-addons" --entrypoint /bin/bash --name create_module_odoo -v odoodock_odoo_addons:/mnt/extra-addons -v odoodock_odoo_data:/var/lib/odoo odoodock_web -c "$command"' EXIT`
 
 # comprobación del código de error de salida
 if [ "$?" -ne 0 ]; then
@@ -88,7 +88,7 @@ if [ "$?" -ne 0 ]; then
 elif [ ! -z $FILE ]; then
   # obtención del nombre del fichero a partir de la ruta
   FILENAME_ZIP=$(basename -- "$FILE")
-  echo -e "Copiando ficheros de HOST (/temp/${FILENAME_ZIP%zip}) -> CONTAINER (/mnt/extra/addons/${FILENAME_ZIP%zip})"
+  echo -e "\033[0;32m[INFO]\033[0m Copiando ficheros de HOST (/temp/${FILENAME_ZIP%zip}) -> CONTAINER (/mnt/extra/addons/${FILENAME_ZIP%zip})"
   error_msg=`trap 'docker cp /tmp/${FILENAME_ZIP%.zip} odoodock-web-1:/mnt/extra-addons' EXIT`
  
   if [ "$?" -ne 0 ]; then

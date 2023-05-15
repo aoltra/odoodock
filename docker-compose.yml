@@ -20,6 +20,13 @@ volumes:
       type: 'none'
       o: 'bind'
       device: ${APP_MODULE_PATH_HOST}
+
+  odoo_data: 
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: ${DATA_PATH_HOST}/odoo
       
   mariadb_data:
     driver: local
@@ -77,10 +84,9 @@ services:
     # donde se ejecuta docker-compose
     volumes:
       - odoo_addons:/mnt/extra-addons
-      - ${DATA_PATH_HOST}/odoo:/var/lib/odoo
+      - odoo_data:/var/lib/odoo
       - ${SERVER_INFO_PATH_HOST}/odoo/logs:/var/log/odoo
-      - ${SERVER_INFO_PATH_HOST}/odoo/repo:${REPO_PATH_CONTAINER}
-      - ${SERVER_INFO_PATH_HOST}/odoo/home:/home/odoo
+      - ${SERVER_INFO_PATH_HOST}/odoo/repo:${REPO_PATH_CONTAINER}    
       - odoo_conf:/etc/odoo
 
     deploy:

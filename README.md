@@ -117,7 +117,7 @@ Odoodock es un entorno de desarrollo de Odoo para Docker que sigue la idea propu
    ./create-module.sh -g https://github.com/user/mimodulo.git
    ```
 
-   > Si el repo es público y todavía no se ha configurado el acceso por _ssh_, lo más rápido es utilizar _https_. Si el acceso se quiere realizar por ssh será necesario configurarlo. Más información en [Configuración git/ssh]()
+   > Si el repo es público y todavía no se ha configurado el acceso por _ssh_, lo más rápido es utilizar _https_. Si el acceso se quiere realizar por ssh será necesario configurarlo. Más información en [Configuración git/ssh](#configuración-gitssh)
 
 #### O3. Crear un módulo a partir de un fichero zip
 
@@ -148,7 +148,13 @@ Odoodock es un entorno de desarrollo de Odoo para Docker que sigue la idea propu
 
 Tanto la instalación de _git_ como la de _ssh_ se configuran desde fichero _.env_ (por defecto se realizan ambas). 
 
-Para realizar la conexión con el remoto es necesario que en el _home_ del contenedor se almacenen las claves privadas del usuario
+En general, la forma más sencilla de trabajar con un remoto es mediante _ssh_. Para ello, es necesario que en el _home_ del contenedor (en este caso _/var/lib/home_) se almacene la clave privada del usuario y que se tenga permisos sobre ella:
+
+```
+> docker cp ~/.ssh/id_rsa odoodock-web-1:/var/lib/odoo/.ssh
+> docker run --rm --entrypoint /bin/bash -v odoodock_odoo_data:/var/lib/odoo odoodock_web -c "chown odoo:odoo /var/lib/odoo/.ssh/id_rsa"
+```
+donde _id_rsa_ es el fichero que contiene la clave privada del usuario.
 
 ## Licencia
 
