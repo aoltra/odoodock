@@ -65,6 +65,9 @@ RUN chmod 777 /runodoo.sh
 COPY ./entrypoint.sh /entrypoint.sh
 RUN chmod 777 /entrypoint.sh
 
+# sólo recomendable en desarrollo
+RUN usermod -s /bin/bash odoo
+
 USER odoo
 
 # copio el fichero de configuraciones de ejecución de python
