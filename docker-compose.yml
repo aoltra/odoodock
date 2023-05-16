@@ -26,7 +26,7 @@ volumes:
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: ${DATA_PATH_HOST}/odoo
+      device: ${DATA_PATH_HOST}/odoo/${ODOO_VERSION}/${ODOO_SERVER_NAME}
       
   mariadb_data:
     driver: local
@@ -117,7 +117,7 @@ services:
     # Mapeamos el directorio del contenedor "var/lib/postgresql/data" en un directorio local
     # por defecto en la carpeta .odoodock del home del usuario
     volumes:
-      - ${DATA_PATH_HOST}/postgres:/var/lib/postgresql/data
+      - ${DATA_PATH_HOST}/postgres/odoo_${ODOO_VERSION}/${ODOO_SERVER_NAME}:/var/lib/postgresql/data
 
     
   #################################
