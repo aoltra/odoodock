@@ -141,7 +141,7 @@ _create-module.sh_ permite la creación desde fuera del contenedor de un módulo
 
 Siempre es posible entrar dentro del contendor _odoodck-web-1_ y ejecutar los comandos necesarios.
 
-> ¡Atención!. La ejecución de estos comandos requiere que el proceso de depuración esté en marcha. En caso contrario hay que tener en en cuenta que es posible que el contenedor pare su ejecución ya que el proceso que se ejecuta es interrumpido. Al cabo de unos segundos debería volver a reiniciarse de manera automática, aunque siempre es posible forzar el reinicio con _docker compose up -d web_
+> ¡Atención!. La ejecución de estos comandos requiere que el proceso de [depuración](#cómo-depurar-módulos-con-vscode) esté en marcha. En caso contrario hay que tener en cuenta que es posible que el contenedor pare su ejecución ya que el proceso que se ejecuta es interrumpido. Al cabo de unos segundos debería volver a reiniciarse de manera automática, aunque siempre es posible forzar el reinicio con _docker compose up -d web_
 
 **O1. Crear un módulo con _odoo scaffold_**
 
@@ -167,7 +167,6 @@ Siempre es posible entrar dentro del contendor _odoodck-web-1_ y ejecutar los co
    > unzip [nombre_del_modulo].zip
    ```
 
-
 ## Configuración git/ssh
 
 Tanto la instalación de _git_ como la de _ssh_ se configuran desde fichero _.env_ (por defecto se realizan ambas). 
@@ -180,7 +179,23 @@ $ docker run --rm --entrypoint /bin/bash -v odoodock_odoo_data:/var/lib/odoo odo
 ```
 donde _id_rsa_ es el fichero que contiene la clave privada del usuario.
 
-## Depuración de código con VSCode
+> Si _git_ está configurado de manera global en el host (fichero _~/.gitignore_), los datos serán copiados automáticamente al contenedor se arranque el desarrollo remoto (Ver [Cómo depurar módulos con VSCode](#cómo-depurar-módulos-con-vscode))
+
+## Cómo depurar módulos con VSCode
+
+La depuración de módulos se realiza aprovechando la características Remote Development de VSCode. Para utilizarla con Docker es necesario instalar [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers). El acceso se realiza a través del icono <img style="vertical-align:middle" src="./DOCUMENTATION/static/icon_remote_containers.png" width="35" height="39" alt="icono acceso Remote Development"> y, al acceder, muestra en el panel vertical los contenedores y los volúmenes existentes. 
+
+El proceso para poder depurar consiste:
+
+ 1. Adjuntar a Visual Studio Code el contenedor _odoodock-web-1_. Esa operación abrirá una nueva instancia de VSCode que será desde la que se trabajará.
+
+ 2. Instalar la extensión _Python_
+ 
+ 3. Acceder al _Explorer_ y abrir una carpeta (_Open Folder_)
+
+ 3. Seleccionar la carpeta _/mnt/extra-addons_
+
+ 4. Arrancar desde _Run & Debug_ la configuración _Python: Odoo attach debug_
 
 ## Trabajando con los contenedores
 
@@ -219,6 +234,12 @@ Por ejemplo, para el contenedor _odoodock-web-1_
 ```
 $ docker logs --follow odoodock-web-1
 ```
+
+## Preguntas frecuentes
+
+* **En ocasiones el contenedor _contenedor odoodock-web-1_ cae o se reinicia**
+
+    Generalmente el problema viene por la modificación (nuevo fichero, modificación de alguno de los existentes...) del directorio de _/mnt/extra-addons_ sin haber lanzado el proceso de [depuración](#cómo-depurar-módulos-con-vscode). En general el contenedor debería reinciarse por si solo y sólo requeriría reacargar la ventana del VSCode, pero una opción más sencilla es tener arrancado el proceso de depuración.
 
 
 ## Licencia
