@@ -88,7 +88,7 @@ if [ "$?" -ne 0 ]; then
 elif [ ! -z $FILE ]; then
   # obtención del nombre del fichero a partir de la ruta
   FILENAME_ZIP=$(basename -- "$FILE")
-  echo -e "\033[0;32m[INFO]\033[0m Copiando ficheros de HOST (/temp/${FILENAME_ZIP%zip}) -> CONTAINER (/mnt/extra/addons/${FILENAME_ZIP%zip})"
+  echo -e "\033[0;32m[INFO]\033[0m Copiando ficheros de HOST (/tmp/${FILENAME_ZIP%.zip}) -> CONTAINER (/mnt/extra/addons/${FILENAME_ZIP%.zip})"
   error_msg=`trap 'docker cp /tmp/${FILENAME_ZIP%.zip} odoodock-web-1:/mnt/extra-addons' EXIT`
  
   if [ "$?" -ne 0 ]; then
@@ -96,6 +96,7 @@ elif [ ! -z $FILE ]; then
   else
     echo -e "\033[0;32m[OK]\033[0m Acción ejecutada."
   fi
+  rm -rf /tmp/${FILENAME_ZIP%.zip}
 else
   echo -e "\033[0;32m[INFO]\033[0m Acción ejecutada."
 fi
