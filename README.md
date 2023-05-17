@@ -175,9 +175,15 @@ En general, la forma más sencilla de trabajar con un remoto es mediante _ssh_. 
 
 ```
 $ docker cp ~/.ssh/id_rsa odoodock-web-1:/var/lib/odoo/.ssh
-$ docker run --rm --entrypoint /bin/bash -v odoodock_odoo_data:/var/lib/odoo odoodock-web -c "chown odoo:odoo /var/lib/odoo/.ssh/id_rsa"
+$ docker run --rm --entrypoint /bin/bash -u root -v odoodock_odoo_data:/var/lib/odoo odoodock-web -c "chown odoo:odoo /var/lib/odoo/.ssh/id_rsa"
 ```
 donde _id_rsa_ es el fichero que contiene la clave privada del usuario.
+
+Por último hay que añadir el repo remoto al fichero _known_hosts_. Por ejemplo si el remoto es _github.com_ :
+
+```
+$ docker run --rm --entrypoint /bin/bash -v odoodock_odoo_data:/var/lib/odoo odoodock-web -c "ssh-keyscan -t rsa github.com >> ~/.ssh/known_host"
+```
 
 > Si _git_ está configurado de manera global en el host (fichero _~/.gitignore_), los datos serán copiados automáticamente al contenedor se arranque el desarrollo remoto (Ver [Cómo depurar módulos con VSCode](#cómo-depurar-módulos-con-vscode))
 
