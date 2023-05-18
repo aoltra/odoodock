@@ -14,12 +14,12 @@ function check_config() {
     DB_ARGS+=("--${param}")
     DB_ARGS+=("${value}")
 }
-# comprueba si está definidos en odoo.conf y si lo están coge su valor
+# comprueba si están definidos en odoo.conf y si lo están coge su valor
 check_config "db_host" "$HOST"
 check_config "db_port" "$PORT"
 check_config "db_user" "$USER"
 check_config "db_password" "$PASSWORD"
 
-# ejecuta odoo a través del módulo debugpy para poder ser depurado con adjutando los módulos
+# ejecuta odoo a través del módulo debugpy para poder ser depurado adjutando los módulos
 # $@ es una lista con los parámetros que entran a este script 
 exec python3 -m debugpy --listen 5678 /usr/bin/odoo "$@" "${DB_ARGS[@]}" --dev=all 
