@@ -27,6 +27,20 @@ volumes:
       type: 'none'
       o: 'bind'
       device: ${DATA_PATH_HOST}/odoo/${ODOO_VERSION}/${ODOO_SERVER_NAME}
+
+  odoo_logs: 
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: ${SERVER_INFO_PATH_HOST}/odoo/logs
+
+  odoo_repo: 
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: ${SERVER_INFO_PATH_HOST}/odoo/repo
       
   mariadb_data:
     driver: local
@@ -85,8 +99,8 @@ services:
     volumes:
       - odoo_addons:/mnt/extra-addons
       - odoo_data:/var/lib/odoo
-      - ${SERVER_INFO_PATH_HOST}/odoo/logs:/var/log/odoo
-      - ${SERVER_INFO_PATH_HOST}/odoo/repo:${REPO_PATH_CONTAINER}    
+      - odoo_logs:/var/log/odoo
+      - odoo_repo:${REPO_PATH_CONTAINER}    
       - odoo_conf:/etc/odoo
 
     deploy:
