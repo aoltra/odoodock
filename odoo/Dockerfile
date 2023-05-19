@@ -50,9 +50,13 @@ RUN if [ ${ODOO_INSTALL_SSL_DEV} = true ]; then \
 # instalacion del módulo debugpy
 RUN pip3 install debugpy
 
+# creación de la carpeta de almacenamiento de documentos
+ARG REPO_PATH_CONTAINER=/mnt/odoo-repo
+RUN mkdir -p ${REPO_PATH_CONTAINER}
+
 # Asigno propietario y grupo al directorio de configuración, addons
 # y al de logs
-RUN chown -R odoo:odoo /etc/odoo /var/log/odoo /mnt/extra-addons /var/lib/odoo
+RUN chown -R odoo:odoo /etc/odoo /var/log/odoo /mnt/extra-addons /var/lib/odoo ${REPO_PATH_CONTAINER}
 
 # copio el fichero de configuraciones 
 COPY odoo.conf /etc/odoo/

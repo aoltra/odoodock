@@ -68,6 +68,7 @@ services:
           - ODOO_INSTALL_SSH=${ODOO_INSTALL_SSH}
           - ODOO_INSTALL_SSL_DEV=${ODOO_INSTALL_SSL_DEV}
           - ODOO_INSTALL_PDFTK=${ODOO_INSTALL_PDFTK}
+          - REPO_PATH_CONTAINER=${REPO_PATH_CONTAINER}
        
     # Port Mapping: indicamos que el puerto 8069 del contenedor se mapeara con 
     # el puerto ODOO_PORT en el anfritrion
