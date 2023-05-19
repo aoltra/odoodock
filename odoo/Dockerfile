@@ -57,6 +57,8 @@ RUN mkdir -p ${REPO_PATH_CONTAINER}
 # Asigno propietario y grupo al directorio de configuración, addons
 # y al de logs
 RUN chown -R odoo:odoo /etc/odoo /var/log/odoo /mnt/extra-addons /var/lib/odoo ${REPO_PATH_CONTAINER}
+# permito el acceso a la lectura de los logs desde el host 
+RUN chmod 755 /var/log/odoo
 
 # copio el fichero de configuraciones 
 COPY odoo.conf /etc/odoo/
