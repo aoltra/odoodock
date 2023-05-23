@@ -247,6 +247,23 @@ $ docker logs --follow odoodock-web-1
 
     Generalmente el problema viene por la modificación (nuevo fichero, modificación de alguno de los existentes...) del directorio de _/mnt/extra-addons_ sin haber lanzado el proceso de [depuración](#cómo-depurar-módulos-con-vscode). En general el contenedor debería reinciarse por si solo y sólo requeriría reacargar la ventana del VSCode, pero una opción más sencilla es tener arrancado el proceso de depuración.
 
+* **¿ Es posible depurar dentro del código de Odoo?**
+
+   Sí. Por defecto la configuración para la depuración no lo permite por razones de simplicidad, pero es posible hacerlo modificando el fichero _/mnt/extra-addons/.vscode/launch.json_ del contenedor de tal manera que para la configuración _Python: Odoo attach debug_ incluya la opción _justMyCode_ a False
+
+   ```
+      {
+         "name": "Python: Odoo attach debug",
+         "type": "python",
+         "request": "attach",
+         "connect": {
+               "host": "localhost",
+               "port": 5678
+            },
+         "justMyCode": False
+      },
+   ```
+
 * **¿ Es posible arrancar dos servicios Odoo de manera simultánea?**
 
    Sí. Para ello únicamente hay que crear otra carpeta y seguir los pasos del proceso de [instalación](#instalación). 
