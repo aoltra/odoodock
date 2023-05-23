@@ -61,10 +61,6 @@ RUN chmod 755 /var/log/odoo
 COPY odoo.conf /etc/odoo/
 ENV ODOO_RC /etc/odoo/odoo.conf
 
-# Asigno propietario y grupo al directorio de configuración, addons
-# y al de logs
-RUN chown -R odoo:odoo /etc/odoo /var/log/odoo /mnt/extra-addons /var/lib/odoo ${REPO_PATH_CONTAINER}
-
 # copio fichero de arranque de odoo
 COPY ./runodoo.sh /
 RUN chmod 777 /runodoo.sh
@@ -75,14 +71,18 @@ RUN chmod 777 /entrypoint.sh
 # sólo recomendable en desarrollo
 RUN usermod -s /bin/bash odoo
 
-USER odoo
-
 # copio el fichero de configuraciones de ejecución de python
 RUN mkdir /mnt/extra-addons/.vscode
 COPY ./.vscode/launch.json /mnt/extra-addons/.vscode/launch.json
 
+# Asigno propietario y grupo al directorio de configuración, addons
+# y al de logs
+RUN chown -R odoo:odoo /etc/odoo /var/log/odoo /mnt/extra-addons /var/lib/odoo ${REPO_PATH_CONTAINER} 
+
 # puerto por el que escucha conexiones
 EXPOSE 8069
+
+USER odoo
 
 # fichero a ejecutar al arrancar
 ENTRYPOINT ["/entrypoint.sh"]
@@ -91,4 +91,3 @@ ENTRYPOINT ["/entrypoint.sh"]
 # para arrancar odoo con parámetros no incluidos en enviroment
 # por ejemplo CMD ["--pidfile=/odoo.pid"]
 CMD []
-
