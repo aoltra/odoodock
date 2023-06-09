@@ -45,7 +45,7 @@
 
    ```
    $ cd odoo_dev
-   $ git clone git@github.com:aoltra/odoodock.git
+   $ git clone https://github.com/aoltra/odoodock.git
    ```
 
 3. Entrar en la carpeta _odoodock_
@@ -224,13 +224,13 @@ $ ./up.sh --build
 **O1. Mostrar los logs de todos los servicios arrancados**
 
 ```
-$ docker composer logs
+$ docker compose logs
 ```
 
 **O2. Mostrar en vivo los logs de todos los servicios arrancados**
 
 ```
-$ docker composer logs --follow
+$ docker compose logs --follow
 ```
 
 **O3. Mostrar en vivo los logs de un único contenedor**
