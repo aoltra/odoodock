@@ -3,11 +3,12 @@
 ########################################################
 
 # servicios disponibles / available services:
-# web, moodle
+# web, moodle, pgadmin
 
 # Array de servicios
 SERVICES=(
   "web"
   "moodle"
+  "pgadmin"
 )
 

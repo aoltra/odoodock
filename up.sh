@@ -17,5 +17,9 @@ mkdir -p $DATA_PATH_HOST/odoo/$ODOO_VERSION/$ODOO_SERVER_NAME
 test ! -f ./.services && echo -e "\033[0;32m[INFO]\033[0m No existe el fichero .services. Arrancando todos los servicios" 
 test -z $SERVICES && echo -e "\033[0;32m[INFO]\033[0m Variable SERVICES no definida o sin servicios en .services.  Arrancando todos los servicios"
 
+if [[ " ${SERVICES[*]} " =~ " pgadmin " ]]; then
+  mkdir -p $DATA_PATH_HOST/pgadmin
+fi
+
 echo -e "\033[0;32m[INFO]\033[0m Arrancando los servicios: ${SERVICES[@]}"
 exec docker compose up -d "$@" "${SERVICES[@]}"

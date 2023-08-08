@@ -50,6 +50,13 @@ volumes:
 
   moodledata_data:
     driver: local
+
+  pgadmin_data: 
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: ${DATA_PATH_HOST}/pgadmin
       
 services:
   #############################
@@ -135,7 +142,29 @@ services:
     volumes:
       - ${DATA_PATH_HOST}/postgres/odoo_${ODOO_VERSION}/${ODOO_SERVER_NAME}:/var/lib/postgresql/data
 
-    
+  #################################
+  ## PGADMIN ######################
+  #################################
+  # Definimos el servicio pgAdmin
+  pgadmin:
+    image: dpage/pgadmin4:latest
+
+    ports:
+      - "${PGADMIN_PORT}:80"
+
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+      - PGADMIN_CONFIG_SERVER_MODE=${PGADMIN_CONFIG_SERVER_MODE}
+
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+    # Indicamos que depende de "db", por lo cual debe ser procesada primero "db"
+    depends_on:
+      - db
+
+
   #################################
   ## MOODLE #######################
   #################################
