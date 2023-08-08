@@ -7,6 +7,7 @@
 - Creación de imagen personalizada con la instalación de varias herramientas de apoyo.
 - Soporte para _odoo_, _odoo shell_ y _scaffolding_
 - Soporte de varios servicios de apoyo:
+  - pgAdmin
   - Moodle
   - MariaDB (para Moodle)
 - Cada servicio corre en un propio contenedor.
@@ -24,7 +25,7 @@
 - [git](https://git-scm.com/downloads)
 - [Visual Studio Code](https://code.visualstudio.com/)
 - Docker
-   - Opción 1: [Docker Engine](https://docs.docker.com/engine/) >= 23.0.0 con [Docker Compose plugin](https://docs.docker.com/compose/) >= 2.17.0
+   - Opción 1: [Docker Engine](https://docs.docker.com/engine/) >= 24.0.0 con [Docker Compose plugin](https://docs.docker.com/compose/) >= 2.18.0
    - Opción 2: [Docker Desktop](https://docs.docker.com/desktop/)
 
 
