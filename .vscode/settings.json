@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    ".services-example": "shellscript",
+    ".services": "shellscript",
+    ".env-example": "dotenv"
+  }
+}
