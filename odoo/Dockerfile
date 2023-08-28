@@ -66,6 +66,30 @@ RUN if [ ${ODOO_INSTALL_ASDF} = true ]; then \
 
 USER root
 
+# instalación dependencias plugin ruby para asdf
+ARG ODOO_ASDF_INSTALL_PLUGIN_RUBY=false
+RUN if [ ${ODOO_ASDF_INSTALL_PLUGIN_RUBY} = true ] && [ ${ODOO_INSTALL_ASDF} = true ]; then \
+    apt-get install -y --no-install-recommends autoconf patch build-essential rustc libssl-dev libyaml-dev \ 
+    libreadline6-dev zlib1g-dev libgmp-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev \ 
+    libdb-dev uuid-dev \
+;fi
+
+USER odoo
+
+# se añade el plugin de ruby para asdf y se añade a ~/.tool-versions la versión de ruby
+ARG ODOO_ASDF_PLUGIN_RUBY_INSTALL_VERSION=latest
+RUN if [ ${ODOO_ASDF_INSTALL_PLUGIN_RUBY} = true ] && [ ${ODOO_INSTALL_ASDF} = true ]; then \
+    source ~/.bashrc && asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git && \
+    echo ruby ${ODOO_ASDF_PLUGIN_RUBY_INSTALL_VERSION} >> ~/.tool-versions \
+;fi
+
+USER root
+
+# instalacíón de todas las versiones definidas en ~/.tool-versions
+RUN if [ ${ODOO_INSTALL_ASDF} = true ]; then \
+    source ~/.bashrc && asdf install \
+;fi
+
 # instalacion del módulo debugpy
 RUN pip3 install debugpy
 
