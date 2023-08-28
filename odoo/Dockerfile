@@ -3,13 +3,16 @@ FROM odoo:${ODOO_VERSION}
 
 LABEL maintainer="Alfredo Oltra <alfredo.ptcf@gmail.com>"
 
+# Nos aseguramos de usar bash para todos los comandos RUN
+SHELL ["/bin/bash", "-lc"]
+
 USER root
 
-# disponible sólo en el cproceso de construcción de la imagen
+# disponible sólo en el proceso de construcción de la imagen
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update 
-RUN apt-get install -y --no-install-recommends apt-utils iputils-ping telnet 
+RUN apt-get install -y --no-install-recommends apt-utils iputils-ping telnet git curl
 
 # instalación de Oh My ZSH
 ARG ODOO_SHELL_OH_MY_ZSH=false
@@ -22,13 +25,6 @@ ARG ODOO_INSTALL_NANO=false
 RUN if [ ${ODOO_INSTALL_NANO} = true ]; then \
     apt-get install -y --no-install-recommends \
     nano \
-;fi
-
-# instalación git
-ARG ODOO_INSTALL_GIT=true
-RUN if [ ${ODOO_INSTALL_GIT} = true ]; then \
-    apt-get install -y --no-install-recommends \
-    git \
 ;fi
 
 # instalación ssh
@@ -53,6 +49,22 @@ RUN if [ ${ODOO_INSTALL_SSL_DEV} = true ]; then \
     apt-get install -y \ 
     python3-dev build-essential libcurl4-openssl-dev libssl-dev \
 ;fi
+
+# Instalación de ADSF
+ARG ODOO_INSTALL_ASDF=false
+
+# se instala para el usuario, no para root ni para todos los usuarios
+USER odoo
+
+RUN if [ ${ODOO_INSTALL_ASDF} = true ]; then \
+    git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.12.0 && \
+    echo '. ~/.asdf/asdf.sh' >> ~/.bashrc && \
+    echo '. ~/.asdf/completions/asdf.bash' >> ~/.bashrc && \
+    echo '. ~/.asdf/asdf.sh' >> ~/.zshrc && \
+    echo '. ~/.asdf/completions/asdf.bash' >> ~/.zshrc \
+;fi
+
+USER root
 
 # instalacion del módulo debugpy
 RUN pip3 install debugpy

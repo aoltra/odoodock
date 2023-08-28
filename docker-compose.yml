@@ -1,7 +1,8 @@
 version: '3.7'
 
-# Definimos dos volumenes nombrado (odoo_conf) pero que esté enlazado a una
-# carpeta. De esta manera es posible realizar copias sobre él desde el host
+# Definimos varios volumenes nombrados (odoo_conf, odoo_addons..) 
+# pero que esté enlazado a una carpeta. 
+# De esta manera es posible realizar copias sobre él desde el host
 # en la construcción de la imagen y además posteriormente acceder a ellas 
 # desde el host.
 # Un volumen enlazado directamente host:contenedor elimina todo lo que 
@@ -76,6 +77,7 @@ services:
           - ODOO_INSTALL_SSH=${ODOO_INSTALL_SSH}
           - ODOO_INSTALL_SSL_DEV=${ODOO_INSTALL_SSL_DEV}
           - ODOO_INSTALL_PDFTK=${ODOO_INSTALL_PDFTK}
+          - ODOO_INSTALL_ASDF=${ODOO_INSTALL_ASDF}
           - REPO_PATH_CONTAINER=${REPO_PATH_CONTAINER}
        
     # Port Mapping: indicamos que el puerto 8069 del contenedor se mapeara con 
