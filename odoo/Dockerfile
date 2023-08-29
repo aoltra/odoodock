@@ -52,19 +52,16 @@ RUN if [ ${ODOO_INSTALL_SSL_DEV} = true ]; then \
 
 # Instalación de ADSF
 ARG ODOO_INSTALL_ASDF=false
-
-# se instala para el usuario, no para root ni para todos los usuarios
-USER odoo
-
 RUN if [ ${ODOO_INSTALL_ASDF} = true ]; then \
-    git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.12.0 && \
-    echo '. ~/.asdf/asdf.sh' >> ~/.bashrc && \
-    echo '. ~/.asdf/completions/asdf.bash' >> ~/.bashrc && \
-    echo '. ~/.asdf/asdf.sh' >> ~/.zshrc && \
-    echo '. ~/.asdf/completions/asdf.bash' >> ~/.zshrc \
+    git clone https://github.com/asdf-vm/asdf.git /opt/asdf --branch v0.12.0 && \
+    echo '. /opt/asdf/asdf.sh' >> ~/.bashrc && \
+    echo '. /opt/asdf/completions/asdf.bash' >> ~/.bashrc && \
+    echo '. /opt/asdf/asdf.sh' >> ~/.zshrc && \
+    echo '. /opt/asdf/completions/asdf.bash' >> ~/.zshrc \
 ;fi
 
-USER root
+# variable de entorno en la imagen para indicar el directorio donde están los plugins asdf
+ENV ASDF_DATA_DIR /opt/asdf
 
 # instalación dependencias plugin ruby para asdf
 ARG ODOO_ASDF_INSTALL_PLUGIN_RUBY=false
@@ -74,8 +71,6 @@ RUN if [ ${ODOO_ASDF_INSTALL_PLUGIN_RUBY} = true ] && [ ${ODOO_INSTALL_ASDF} = t
     libdb-dev uuid-dev \
 ;fi
 
-USER odoo
-
 # se añade el plugin de ruby para asdf y se añade a ~/.tool-versions la versión de ruby
 ARG ODOO_ASDF_PLUGIN_RUBY_INSTALL_VERSION=latest
 RUN if [ ${ODOO_ASDF_INSTALL_PLUGIN_RUBY} = true ] && [ ${ODOO_INSTALL_ASDF} = true ]; then \
@@ -83,14 +78,29 @@ RUN if [ ${ODOO_ASDF_INSTALL_PLUGIN_RUBY} = true ] && [ ${ODOO_INSTALL_ASDF} = t
     echo ruby ${ODOO_ASDF_PLUGIN_RUBY_INSTALL_VERSION} >> ~/.tool-versions \
 ;fi
 
-USER root
-
 # instalacíón de todas las versiones definidas en ~/.tool-versions
 RUN if [ ${ODOO_INSTALL_ASDF} = true ]; then \
-    source ~/.bashrc && asdf install \
+    source ~/.bashrc && asdf install && \
+    # permiso totales en la carpeta. No recomendable en producción
+    chmod 777 /opt/asdf \
 ;fi
 
-# instalacion del módulo debugpy
+# para el usuario odoo creo el fichero de arranque de bash y de versiones
+USER odoo
+
+RUN if [ ${ODOO_INSTALL_ASDF} = true ]; then \
+    echo '. /opt/asdf/asdf.sh' >> ~/.bashrc && \
+    echo '. /opt/asdf/completions/asdf.bash' >> ~/.bashrc && \
+    echo '. /opt/asdf/asdf.sh' >> ~/.zshrc && \
+    echo '. /opt/asdf/completions/asdf.bash' >> ~/.zshrc && \
+    if [ ${ODOO_ASDF_INSTALL_PLUGIN_RUBY} = true ]; then \
+        echo ruby ${ODOO_ASDF_PLUGIN_RUBY_INSTALL_VERSION} >> ~/.tool-versions \
+    ;fi \
+;fi
+  
+USER root
+
+# instalación del módulo debugpy
 RUN pip3 install debugpy
 
 # creación de la carpeta de almacenamiento de documentos
