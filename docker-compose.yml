@@ -80,6 +80,7 @@ services:
           - ODOO_INSTALL_ASDF=${ODOO_INSTALL_ASDF}
           - ODOO_ASDF_INSTALL_PLUGIN_RUBY=${ODOO_ASDF_INSTALL_PLUGIN_RUBY}
           - ODOO_ASDF_PLUGIN_RUBY_INSTALL_VERSION=${ODOO_ASDF_PLUGIN_RUBY_INSTALL_VERSION}  
+          - ODOO_INSTALL_JEKYLL=${ODOO_INSTALL_JEKYLL}
           - REPO_PATH_CONTAINER=${REPO_PATH_CONTAINER}
        
     # Port Mapping: indicamos que el puerto 8069 del contenedor se mapeara con 

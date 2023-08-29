@@ -100,6 +100,18 @@ RUN if [ ${ODOO_INSTALL_ASDF} = true ]; then \
   
 USER root
 
+ARG ODOO_INSTALL_JEKYLL=false
+# assert Si se quiere instalar jekyll se debe instalar ASDF con ruby
+# la condicion se evalua de izquierda a derecha y en cuanto se pueda decidir si es
+# verdadera o false sale
+RUN [ ${ODOO_INSTALL_JEKYLL} = false ] || [[ (${ODOO_INSTALL_ASDF} = true  &&  ${ODOO_ASDF_INSTALL_PLUGIN_RUBY} = true) ]] \
+         || { echo "Para instalar Jekyll es necesario instalar Ruby"; exit 1; }
+
+RUN if [ ${ODOO_INSTALL_JEKYLL} = true ]; then \
+    gem install jekyll && \
+    gem install bundler \
+;fi
+
 # instalación del módulo debugpy
 RUN pip3 install debugpy
 
