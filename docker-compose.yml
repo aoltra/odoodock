@@ -169,6 +169,24 @@ services:
     depends_on:
       - db
 
+  #################################
+  ## JEKYLL #######################
+  #################################
+  jekyll:
+    build:
+      context: ./jekyll
+
+    # rango de puertos por si se desea escalar el servicio (arrancar más de un contendor)
+    ports:
+      - "4001-4010:4000"
+
+    tty: true
+
+    volumes:
+      - odoo_addons:/srv/jekyll
+
+    depends_on:
+      - web
 
   #################################
   ## MOODLE #######################
