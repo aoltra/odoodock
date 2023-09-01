@@ -2,7 +2,7 @@
 title: Odoodock
 subtitle: Entorno de desarrollo Odoo para Docker
 layout: page
-show_sidebar: true
+show_sidebar: false
 hero_height: is-fullwidth
 ---
 

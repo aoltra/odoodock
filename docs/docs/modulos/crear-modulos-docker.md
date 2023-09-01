@@ -15,7 +15,7 @@ Existen dos opciones: mediante el uso de _create-module.sh_ o mediante el uso di
 
 Siempre es posible entrar dentro del contendor _odoodock-web-1_ y ejecutar los comandos necesarios.
 
-> ¡Atención!. La ejecución de estos comandos requiere que el proceso de [depuración](#cómo-depurar-módulos-con-vscode) esté en marcha. En caso contrario hay que tener en cuenta que es posible que el contenedor pare su ejecución ya que el proceso que se ejecuta es interrumpido. Al cabo de unos segundos debería volver a reiniciarse de manera automática, aunque siempre es posible forzar el reinicio con _docker compose up -d web_
+> ¡Atención!. La ejecución de estos comandos requiere que el proceso de [depuración](/odoodock/docs/modulos/depurar-modulos) esté en marcha. En caso contrario hay que tener en cuenta que es posible que el contenedor pare su ejecución ya que el proceso que se ejecuta es interrumpido. Al cabo de unos segundos debería volver a reiniciarse de manera automática, aunque siempre es posible forzar el reinicio con _docker compose up -d web_
 
 **O1. Crear un módulo con _odoo scaffold_**
 
@@ -30,7 +30,7 @@ Siempre es posible entrar dentro del contendor _odoodock-web-1_ y ejecutar los c
    > cd /mnt/extra-addons
    > git clone [url_repo]
    ```
-> Si el repo es público y todavía no se ha configurado el acceso por _ssh_, lo más rápido es utilizar _https_. Si el acceso se quiere realizar por _ssh_ será necesario configurarlo. Más información en [Configuración git/ssh](#configuración-gitssh)
+> Si el repo es público y todavía no se ha configurado el acceso por _ssh_, lo más rápido es utilizar _https_. Si el acceso se quiere realizar por _ssh_ será necesario configurarlo. Más información en [Configuración git/ssh](/odoodock/docs/como-empezar/configuracion-git-ssh)
 
 **O3. Crear un módulo a partir de un fichero zip**
 

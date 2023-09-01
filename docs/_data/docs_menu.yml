@@ -4,6 +4,8 @@
       link: /docs/como-empezar/requisitos
     - name: Instalación
       link: /docs/como-empezar/instalacion
+    - name: Configuración git/ssh
+      link: /docs/como-empezar/configuracion-git-ssh
       
 - label: Módulos
   items:
@@ -11,4 +13,6 @@
       link: /docs/modulos/crear-modulos-script
     - name: Crear módulos mediante comandos Docker
       link: /docs/modulos/crear-modulos-docker
+    - name: Depuración de módulos VSCode
+      link: /docs/modulos/depurar-modulos
       

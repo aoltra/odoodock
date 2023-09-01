@@ -1,2 +1,8 @@
 - name: Documentación
-  link: /docs/
+  link: /docs
+- name: Servicios
+  link: /services
+- name: Preguntas frecuentes
+  link: /faq
+- name: Acerca de
+  link: /about

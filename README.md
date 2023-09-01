@@ -172,7 +172,7 @@ Siempre es posible entrar dentro del contendor _odoodck-web-1_ y ejecutar los co
 
 Tanto la instalación de _git_ como la de _ssh_ se configuran desde fichero _.env_ (por defecto se realizan ambas). 
 
-En general, la forma más sencilla de trabajar con un remoto es mediante _ssh_. Para ello, es necesario que en el _home_ del contenedor (en este caso _/var/lib/home_) se almacene la clave privada del usuario y que se tenga permisos sobre ella:
+En general, la forma más sencilla de trabajar con un remoto es mediante _ssh_. Para ello, es necesario que en el _home_ del contenedor (en este caso _/var/lib/odoo_) se almacene la clave privada del usuario y que se tenga permisos sobre ella:
 
 ```
 $ docker cp ~/.ssh/id_rsa odoodock-web-1:/var/lib/odoo/.ssh
