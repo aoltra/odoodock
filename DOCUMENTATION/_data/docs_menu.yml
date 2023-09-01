@@ -1,0 +1,14 @@
+- label: Cómo empezar
+  items:
+    - name: Requisitos
+      link: /docs/como-empezar/requisitos
+    - name: Instalación
+      link: /docs/como-empezar/instalacion
+      
+- label: Módulos
+  items:
+    - name: Crear módulos mediante script
+      link: /docs/modulos/crear-modulos-script
+    - name: Crear módulos mediante comandos Docker
+      link: /docs/modulos/crear-modulos-docker
+      
