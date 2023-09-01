@@ -1,0 +1,12 @@
+- label: Servicios
+  items:
+    - name: web (odoo)
+      link: /services/web
+    - name: pgadmin
+      link: /services/pgadmin
+    - name: moodle
+      link: /services/moodle
+    - name: mariadb (moodle)
+      link: /services/mariadb
+    - name: jekyll
+      link: /services/jekyll

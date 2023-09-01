@@ -1,6 +1,5 @@
 ---
 layout: page
-menubar: docs_menu
 title: Preguntas frecuentes
 subtitle:
 show_sidebar: false
