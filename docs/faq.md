@@ -47,7 +47,7 @@ hero_height: is-fullwidth
    - Elegir puertos en los que escucha postgres (ODOO_POSTGRESS_PORT, POSTGRES_PORT) diferentes en cada carpeta
    - Indicar el nombre del contenedor de la base de datos correcto (ODOO_POSTGRESS_HOST)
 
-   > Hay que tener en cuenta que en el caso de más de una instancia los contenedores irán sufijados por números enteros secuenciales: odoodock_web_1, odoodock_web_2, odoodock_db_1, odoodock_db_2...
+   > Hay que tener en cuenta que en el caso de más de una instancia los contenedores irán sufijados por números enteros secuenciales: _odoodock-web-1_, _odoodock-web-2_, _odoodock-db-1_, _odoodock-db-2_...
 
 <br>
 

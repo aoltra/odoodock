@@ -1,6 +1,6 @@
 ---
 layout: page
-title: jekyll
+title: web
 subtitle: Servicios disponibles
 menubar: services_menu
 show_sidebar: false
@@ -17,11 +17,11 @@ El servicio web es el que se encarga de arrancar odoo.
 
 2. Configurar el fichero _.env_ para activar o desactivar [utilidades](#utilidades) internas a instalar.
 
-> Parte de estas utilidades pueden ser arrancadas como contenedores docker. La decisión del método a utilizar depende del propósito del servicio.
+   > Parte de estas utilidades pueden ser arrancadas como contenedores docker. La decisión del método a utilizar depende del propósito del servicio.
 
 3. Ejecutar _./up.sh_ desde la carpeta _odoodock_.
 
-4. Abrir el navegador y acceder a la URL http://locahost:8069
+4. Abrir el navegador y acceder a la URL _http://locahost:8069_.
 
 ### Utilidades
 

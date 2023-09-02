@@ -9,6 +9,8 @@ hero_height: is-fullwidth
 
 ### Requisitos
 
+Los requisitos para usar Odoodock son:
+
 - [git](https://git-scm.com/downloads)
 - [Visual Studio Code](https://code.visualstudio.com/)
 - Docker
