@@ -22,5 +22,5 @@ Plataforma para la admnistración de _PostgreSQL_.
         Username : admin@admin.com 
         Password : secret
 
-   > Es posible configurar el sevici pra que n se solicite usuario y contraseña asignando en el fichero .env el valor _True_ a la variable PGADMIN_CONFIG_SERVER_MODE
+   > Es posible configurar el sevicio para que no se solicite usuario y contraseña asignando en el fichero _.env_ el valor _True_ a la variable PGADMIN_CONFIG_SERVER_MODE
 

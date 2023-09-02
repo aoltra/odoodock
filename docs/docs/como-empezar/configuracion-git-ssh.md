@@ -9,7 +9,7 @@ hero_height: is-fullwidth
 
 ## Configuración git/ssh
 
-Tanto la instalación de _git_ como la de _ssh_ se configuran desde fichero _.env_ (por defecto se realizan ambas). 
+La instalación de _ssh_ se configuran desde fichero _.env_ (por defecto está activa). Por su parte, _git_ viene incluido ya en la imagen de _Odoo_. 
 
 En general, la forma más sencilla de trabajar con un remoto es mediante _ssh_. Para ello, es necesario que en el _home_ del contenedor (en este caso _/var/lib/odoo_) se almacene la clave privada del usuario y que se tenga permisos sobre ella:
 

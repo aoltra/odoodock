@@ -2,11 +2,13 @@
   items:
     - name: web (odoo)
       link: /services/web
+    - name: db (postgres)
+      link: /services/db
     - name: pgadmin
       link: /services/pgadmin
     - name: moodle
       link: /services/moodle
-    - name: mariadb (moodle)
-      link: /services/mariadb
+    - name: mariadb-moodle
+      link: /services/mariadb-moodle
     - name: jekyll
       link: /services/jekyll
