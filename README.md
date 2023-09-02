@@ -1,5 +1,6 @@
 # Odoodock
 
+![GitHub tag (with filter)](https://img.shields.io/github/v/tag/aoltra/odoodock?label=Version&color=%23714b67)
 ![GitHub Repo stars](https://img.shields.io/github/stars/aoltra/odoodock?style=social)
 
 **Odoodock** es un entorno de desarrollo de _Odoo_ para _Docker_ pensado con fines educativos, que sigue la idea propuesta por [laradock](https://laradock.io/introduction/). 

@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Servicios disponibles
-subtitle: Servicios
+title: jekyll
+subtitle: Servicios disponibles
 menubar: services_menu
 show_sidebar: false
 hero_height: is-fullwidth
@@ -9,7 +9,7 @@ hero_height: is-fullwidth
 
 ## web (odoo)
 
-El servicio web es el se encarga de arrancar odoo. 
+El servicio web es el que se encarga de arrancar odoo. 
 
 > Es el servicio principal de _Odoodock_, por lo que siempre debe arrancarse.
 
@@ -19,7 +19,7 @@ El servicio web es el se encarga de arrancar odoo.
 
 > Parte de estas utilidades pueden ser arrancadas como contenedores docker. La decisión del método a utilizar depende del propósito del servicio.
 
-3. Ejecutar _./up.sh_ desde la carpeta odoodock
+3. Ejecutar _./up.sh_ desde la carpeta _odoodock_.
 
 4. Abrir el navegador y acceder a la URL http://locahost:8069
 

@@ -10,13 +10,13 @@ hero_height: is-fullwidth
 
 <br>
 
-* **En ocasiones el contenedor _contenedor odoodock-web-1_ cae o se reinicia**
+* #### En ocasiones el contenedor _contenedor odoodock-web-1_ cae o se reinicia
 
     Generalmente el problema viene por la modificación (nuevo fichero, modificación de alguno de los existentes...) del directorio de _/mnt/extra-addons_ sin haber lanzado el proceso de [depuración](#cómo-depurar-módulos-con-vscode). En general el contenedor debería reinciarse por si solo y sólo requeriría reacargar la ventana del VSCode, pero una opción más sencilla es tener arrancado el proceso de depuración.
 
 <br>
 
-* **¿ Es posible depurar dentro del código de Odoo?**
+* #### ¿ Es posible depurar dentro del código de Odoo ?
 
    Sí. Por defecto la configuración para la depuración no lo permite por razones de simplicidad, pero es posible hacerlo modificando el fichero _/mnt/extra-addons/.vscode/launch.json_ del contenedor de tal manera que para la configuración _Python: Odoo attach debug_ incluya la opción _justMyCode_ a False
 
@@ -34,7 +34,7 @@ hero_height: is-fullwidth
    ```
 <br>
 
-* **¿ Es posible arrancar dos servicios Odoo de manera simultánea?**
+* #### ¿ Es posible arrancar dos servicios Odoo de manera simultánea ?
 
    Sí. Para ello únicamente hay que crear otra carpeta y seguir los pasos del proceso de [instalación](#instalación). 
    
@@ -48,3 +48,19 @@ hero_height: is-fullwidth
    - Indicar el nombre del contenedor de la base de datos correcto (ODOO_POSTGRESS_HOST)
 
    > Hay que tener en cuenta que en el caso de más de una instancia los contenedores irán sufijados por números enteros secuenciales: odoodock_web_1, odoodock_web_2, odoodock_db_1, odoodock_db_2...
+
+<br>
+
+* #### ¿ Es posible utilizar el servicio Jekyll para trabajar simultáneamente con más de un sitio web ?
+
+   Sí. Aunque el servicio jekyll está pensado para dar soporte a un único site, en caso de querer trabajar simultánemente con más de uno es posible arrancar varias instancias del servicio utilizando el parámetro _--scale_.
+
+   ```
+   ./up.sh --scale jekyll=NUM_INSTANCIAS
+   ```
+
+   donde _NUM_INSTANCIAS_ es el número de instancias a arrancar (máximo 10). 
+
+   En cada una de esas instancias es posible crear, compilar o servir un site diferente.
+
+   > En este caso, los puertos de acceso al servidor Jekyll van desde el 4001 al 4010, asociados a los contenedores _odoodock-jekyll-1_ a _odoodock-jekyll-10_
