@@ -65,16 +65,12 @@ hero_height: is-fullwidth
 
 10. Para comprobar que todo ha ido correctamente, acceder desde un navegador a _localhost:8069_, donde debe aparecer la página del selector de la base de datos.
 
-<center>
-
-![Selector base de datos](../../assets/odoo_database_init.png)
-
-</center>
-
+     ![Selector base de datos](../../img/odoo_database_init.png)
+   
 11. Configurar los valores y crear la base de datos
 
-   > Es recomendable almacenar el _master password_ en un fichero aparte
+    > Es recomendable almacenar el _master password_ en un fichero aparte
 
 12. Si todo ha ido correctamente, una vez finalizada la creación de la base de datos, deberá cargarse en el navegador la página _Aplicaciones_
 
-![Selector base de datos](./DOCUMENTATION/assets/odoo_app_init.png)
+    ![Aplicaciones](../../img/odoo_app_init.png)

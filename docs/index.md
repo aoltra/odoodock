@@ -11,7 +11,7 @@ hero_height: is-fullwidth
 ![GitHub tag (with filter)](https://img.shields.io/github/v/tag/aoltra/odoodock?label=Version&color=%23714b67)
 ![GitHub Repo stars](https://img.shields.io/github/stars/aoltra/odoodock?style=social)
 
-Odoodock es un entorno de desarrollo de _Odoo_ para _Docker_ pensado con fines educativos, que sigue la idea propuesta por [laradock](https://laradock.io/introduction/). 
+**Odoodock** es un entorno de desarrollo para _Odoo_ basado _Docker_ y pensado con fines educativos, que sigue la idea propuesta por [laradock](https://laradock.io/introduction/). 
 
 ### Características
 
@@ -33,4 +33,4 @@ Para instrucciones más completas, consulta la [Documentación](/docs/)
 
 ### Licencia
 
-Odoodock se distribuye bajo licencia GPL 3.
+Odoodock se distribuye bajo [licencia GPL 3](https://www.gnu.org/licenses/gpl-3.0.html).

@@ -9,7 +9,7 @@ hero_height: is-fullwidth
 
 ## Cómo depurar módulos con VSCode
 
-La depuración de módulos se realiza aprovechando la características Remote Development de VSCode. Para utilizarla con Docker es necesario instalar [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers). El acceso se realiza a través del icono <img style="vertical-align:middle" src="./DOCUMENTATION/assets/icon_remote_containers.png" width="35" height="39" alt="icono acceso Remote Development"> y, al acceder, muestra en el panel vertical los contenedores y los volúmenes existentes. 
+La depuración de módulos se realiza aprovechando la características Remote Development de VSCode. Para utilizarla con Docker es necesario instalar [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers). El acceso se realiza a través del icono <img style="vertical-align:middle" src="../../img/icon_remote_containers.png" width="35" height="39" alt="icono acceso Remote Development"> y, al acceder, muestra en el panel vertical los contenedores y los volúmenes existentes. 
 
 El proceso para poder depurar consiste:
 
