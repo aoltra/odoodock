@@ -34,7 +34,7 @@ docker exec -it odoodock-jekyll-1 bash
 > cd MI_MODULO
 > jekyll new docs
 > cd docs
-> add bundler webrick
+> bundler add webrick
 ```
 donde _MI_MODULO_ es la carpeta que contiene el módulo y _docs_ la carpeta que contendrá el código jekyll del sitio. 
 
@@ -46,7 +46,7 @@ Desde la carpeta _odoodock_, ejecutar:
 docker exec -it odoodock-jekyll-1 bash -c "cd MI_MODULO \ 
  && jekyll new docs \
  && cd docs \
- && bundler add webrick">   
+ && bundler add webrick"   
 ```
 donde _MI_MODULO_ es la carpeta que contiene el módulo y _docs_ la carpeta que contendrá el código jekyll del sitio. 
 
@@ -71,3 +71,7 @@ docker exec -it odoodock-jekyll-1 bash
 > cd MI_MODULO\docs
 > jekyll server 
 ```
+
+En este caso, desde la URL _http://locahost:4001_ es posible acceder a la documentación.
+
+> En función de los posibles contenedores arrancados, el puerto puede variar entre el 4001 y el 4010. El puerto asignado puede ser localizado utilizando el comando _docker ps -a_.

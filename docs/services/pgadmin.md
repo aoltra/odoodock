@@ -22,5 +22,11 @@ Plataforma para la admnistración de _PostgreSQL_.
         Username : admin@admin.com 
         Password : secret
 
-   > Es posible configurar el sevicio para que no se solicite usuario y contraseña asignando en el fichero _.env_ el valor _True_ a la variable PGADMIN_CONFIG_SERVER_MODE
+   > Es posible configurar el servicio para que no se solicite usuario y contraseña asignando en el fichero _.env_ el valor _False_ a la variable PGADMIN_CONFIG_SERVER_MODE
 
+5. Configurar el servidor con los datos:
+
+        Server: db
+        Port: 5432
+        User: odoo
+        Password: odoo
