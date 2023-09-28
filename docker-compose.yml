@@ -168,6 +168,16 @@ services:
     depends_on:
       - db
 
+  ###################################
+  ## PDF-SIGNATURE-VALIDATOR ########
+  ###################################
+  pdf-signature-validator:
+    build:
+      context: https://github.com/CEED-Informatica/pdf-signature-validator-service.git
+
+    ports:
+      - "${PDFSIGVALID_PORT}:80"
+
   #################################
   ## JEKYLL #######################
   #################################
