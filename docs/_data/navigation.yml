@@ -7,6 +7,8 @@
       link: /working-with-containers
     - name: Servicios
       link: /services
+- name: Scripts
+  link: /scripts
 - name: Preguntas frecuentes
   link: /faq
 - name: Acerca de
