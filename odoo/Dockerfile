@@ -139,6 +139,7 @@ RUN usermod -s /bin/bash odoo
 # copio el fichero de configuraciones de ejecución de python
 RUN mkdir /mnt/extra-addons/.vscode
 COPY ./.vscode/launch.json /mnt/extra-addons/.vscode/launch.json
+COPY ./.vscode/extensions.json /mnt/extra-addons/.vscode/extensions.json
 
 # Asigno propietario y grupo al directorio de configuración, addons
 # y al de logs
