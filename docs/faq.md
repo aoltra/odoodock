@@ -49,6 +49,8 @@ hero_height: is-fullwidth
 
    > Hay que tener en cuenta que en el caso de más de una instancia los contenedores irán sufijados por números enteros secuenciales: _odoodock-web-1_, _odoodock-web-2_, _odoodock-db-1_, _odoodock-db-2_...
 
+   En caso de que no se requiera que el arranque de los servicios sea simultáneo, para evitar conflictos es recomendable eliminiar todos los volúmenes entre ejecuciones, por ejemplo con _docker compose down -v_ 
+
 <br>
 
 * #### ¿ Es posible utilizar el servicio Jekyll para trabajar simultáneamente con más de un sitio web ?
