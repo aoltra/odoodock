@@ -14,6 +14,19 @@ exit_abnormal() {
   exit 1
 }
 
+resume_container() {
+  # reanuda el contenedor
+  if [ "$CONTAINER_RUNNING" -eq 1 ]; then
+      error_msg=`trap 'exec docker compose up -d web 2>&1' EXIT`
+      # comprobación del código de error de salida
+      if [ "$?" -ne 0 ]; then
+          echo -e "\033[0;31m[ERROR]\033[0m" $error_msg
+      else
+          echo -e "\033[0;32m[OK]\033[0m Contenedor odoodock-web reiniciado."
+      fi
+  fi
+}
+
 if [ "$#" -ne 2 ]; then
   echo -e "\033[0;31m[ERROR]\033[0m Es necesario indicar una opción y un parámetro"
   exit 1
@@ -94,8 +107,18 @@ elif [ ! -z $FILE ]; then
   if [ "$?" -ne 0 ]; then
     echo -e "\033[0;31m[ERROR]\033[0m" $error_msg
   else
-    echo -e "\033[0;32m[OK]\033[0m Acción ejecutada."
+    # se ha realizado la copia, cambiando los permisos
+    resume_container
+    echo -e "\033[0;32m[INFO]\033[0m Cambiando propietario"
+    error_msg=`trap 'docker exec -u 0 -it odoodock-web-1 chown 101:101 -R /mnt/extra-addons/${FILENAME_ZIP%.zip}' EXIT`
+
+    if [ "$?" -ne 0 ]; then
+      echo -e "\033[0;31m[ERROR]\033[0m" $error_msg
+    else
+      echo -e "\033[0;32m[OK]\033[0m Acción ejecutada."
+    fi
   fi
+
   rm -rf /tmp/${FILENAME_ZIP%.zip}
 else
   echo -e "\033[0;32m[INFO]\033[0m Acción ejecutada."
@@ -103,13 +126,4 @@ fi
 
 echo -e "\033[0;32m[INFO]\033[0m Eliminando contenedor create_module_odoo."
 
-# reanuda el contenedor
-if [ "$CONTAINER_RUNNING" -eq 1 ]; then
-    error_msg=`trap 'exec docker compose up -d web 2>&1' EXIT`
-    # comprobación del código de error de salida
-    if [ "$?" -ne 0 ]; then
-        echo -e "\033[0;31m[ERROR]\033[0m" $error_msg
-    else
-        echo -e "\033[0;32m[OK]\033[0m Contenedor odoodock-web reiniciado."
-    fi
-fi
+resume_container
