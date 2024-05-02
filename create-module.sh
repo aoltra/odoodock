@@ -4,9 +4,9 @@
 usage() {                                
   echo "Uso: $0 [ -g URL ] | [ -s MODULE ] | [ -z NAME ] | [-h]" 1>&2
   echo 
-  echo "\t-z: fichero zip que contiene el módulo"
-  echo "\t-g: URL del repositorio git"
-  echo "\t-s: nombre del módulo para hacer scaffolding"
+  echo "  -z: fichero zip que contiene el módulo"
+  echo "  -g: URL del repositorio git"
+  echo "  -s: nombre del módulo para hacer scaffolding"
 }
 
 exit_abnormal() {                 
@@ -27,19 +27,17 @@ resume_container() {
   fi
 }
 
-if [ "$#" -ne 2 ]; then
-  echo -e "\033[0;31m[ERROR]\033[0m Es necesario indicar una opción y un parámetro"
-  exit 1
-fi
-
 # OPTION es la variable que almacena el item en cada momento
-while getopts "s:z:g:h:" OPTION; do
+options=0
+while getopts ":hs:z:g:" OPTION; do
   case $OPTION in
     s)
+      ((options++))
       MODULE=$OPTARG
       command=`echo odoo scaffold $OPTARG /mnt/extra-addons`
       ;;
     z)
+      ((options++))
       FILE=$OPTARG
       if [ -f "$FILE" ]; then
         unzip $OPTARG -d /tmp 
@@ -49,18 +47,29 @@ while getopts "s:z:g:h:" OPTION; do
       fi
       ;;
     g)
+      ((options++))
       URL=$OPTARG
       command=`echo git clone $OPTARG`
       ;;
     h)
       usage
+      exit 0
+      ;;
+    :)
+      echo -e "\033[0;31m[ERROR]\033[0m La opción -${OPTARG} necesita un argumento."
+      exit_abnormal
       ;;
     ?)
-      echo -e "\033[0;31m[ERROR]\033[0m No se ha indicado ninguna opción"
+      echo -e "\033[0;31m[ERROR]\033[0m Opción no reconocida -${OPTARG}."
       exit_abnormal
       ;;
   esac
 done
+
+if [ "$options" -gt 1 ]; then
+  echo -e "\033[0;31m[ERROR]\033[0m Sólo se permite una opción."
+  exit_abnormal
+fi
 
 CONTAINER_RUNNING=1
 
