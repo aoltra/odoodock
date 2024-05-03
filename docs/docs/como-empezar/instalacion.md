@@ -57,6 +57,13 @@ hero_height: is-fullwidth
    $ chmod u+x ./create-module.sh
    ```
 
+   > En sistemas WSL con Windows 10 es posible que el comando _chmod_ no funcione. Una posible solución consiste en  modificar el fichero _/etc/wsl.conf_ (es necesario _sudo_) e insertar:
+   > ```
+   > [automount]
+   > options = "metadata"
+   > ```
+   > Es necesario reiniciar WSL.
+
 9. Arrancar los servicios
 
    ```
