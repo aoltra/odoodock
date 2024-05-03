@@ -53,6 +53,14 @@ hero_height: is-fullwidth
 
 <br>
 
+* #### ¿Cómo se puede copiar ficheros dentro del contenedor ?
+
+    Para copiar ficheros en general, se puede utilizar el script _/scripts/copy2docker.sh_, que permite elegir la ruta de destino.
+
+    >  En caso de un módulo (desde _github_ o en formato _zip_) es posible crearlo dentro del contenedor con el script __create_module.sh__ que se encuentra en la carpeta raíz de _odoodock_.
+
+<br>
+
 * #### ¿ Es posible utilizar el servicio Jekyll para trabajar simultáneamente con más de un sitio web ?
 
    Sí. Aunque el servicio jekyll está pensado para dar soporte a un único site, en caso de querer trabajar simultánemente con más de uno es posible arrancar varias instancias del servicio utilizando el parámetro _--scale_.

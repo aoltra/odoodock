@@ -21,5 +21,16 @@ Puede obtenerse una ayuda más detallada de las opciones a través del comando:
 database_backup -h
 ```
 
+## copy2docker
 
+__copy2docker__ permite la copia de archivos desde el host al interior de un contenedor cambiando el propietario de los archivos para que puedan ser modificados desde allí.
 
+Por defecto, el script copia al interior del servicio _web_, en concreto al contenedor número _1_ (_odoodock-web-1_) y asigna como propietario al usuario con identificador _101_, que en el caso del servicio _web_ es _odoo_.
+
+Es posible modificar tanto el servicio como el usuario con las opciones _-s_ y _-u_ respectivamente.
+
+Puede obtenerse una ayuda más detallada de las opciones a través del comando:
+
+```
+copy2docker -h
+```
