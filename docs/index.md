@@ -29,7 +29,7 @@ hero_height: is-fullwidth
 
 ### Documentación
 
-Para instrucciones más completas, consulta la [Documentación](/docs/)
+Para instrucciones más completas, consulta la [Documentación](https://aoltra.github.io/odoodock/docs)
 
 ### Licencia
 
