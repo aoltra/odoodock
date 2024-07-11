@@ -28,7 +28,7 @@ twitter_username: aoltra
 github_username:  aoltra
 
 # Build settings
-remote_theme: chrisrhymes/bulma-clean-theme
+remote_theme: chrisrhymes/bulma-clean-theme@v0.14.0
 #plugins:
 #  - jekyll-feed
 
