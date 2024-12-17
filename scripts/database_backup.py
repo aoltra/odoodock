@@ -12,7 +12,7 @@ import os, json
 import shutil
 from datetime import datetime
 
-print('\033[1modoodock | database-backup. v1.0\033[0m')
+print('\033[1modoodock | database-backup. v1.1\033[0m')
 
 parser = argparse.ArgumentParser(
   description = 'Crea un backup de la base de datos')
@@ -24,6 +24,8 @@ parser.add_argument('-p', '--port', default = '8069', help = 'Puerto del servido
 parser.add_argument('-sr', '--user', default = 'admin', help = 'Usuario administrador Odoo. Por defecto: admin')
 parser.add_argument('-ps', '--password', default = 'admin', help = 'Contraseña usuario administrador Odoo. Por defecto: admin')
 parser.add_argument('-dbs', '--db_service', default = 'odoodock-db-1', help = 'Nombre del servicio de la base de datos. Por defecto: odoodock-db-1')
+parser.add_argument('-pt', '--path', default = '', help = 'Carpeta donde se ubica el backup. Por defecto: . (carpeta de ejecución del script)')
+parser.add_argument('-n', '--name', default = '', help = 'Nombre del fichero de backup. Por defecto: {database_name}_{D}-{M}-{Y}_{H}-{M}-{S}__by_odoodock')
 
 args = parser.parse_args()
 
@@ -32,6 +34,8 @@ db = args.database
 username = args.user
 password = args.password
 db_service = args.db_service
+path = args.path
+name = args.name
 
 # end point xmlrpc/2/common permite llamadas sin autenticar
 print('\033[0;32m[INFO]\033[0m Conectando con',url, ' -> ', db)
@@ -96,9 +100,19 @@ try:
 
   # Creando archivo de Backup
   print(f'\033[0;32m[INFO]\033[0m Generando ZIP') 
-  backup_name = f'{db}_{now.strftime("%d-%m-%Y")}_{now.strftime("%H-%M-%S")}__by_odoodock'
-  shutil.make_archive(backup_name, format='zip', root_dir='bckp_temp')
-  print(f'\033[0;32m[INFO]\033[0m Backup realizado: {backup_name}.zip') 
+ 
+  if len(path) != 0:
+    os.makedirs(path)
+
+  if len(name) == 0:
+    backup_name = f'{db}_{now.strftime("%d-%m-%Y")}_{now.strftime("%H-%M-%S")}__by_odoodock'
+  else:
+    backup_name = f'{name}'
+
+  complete_backup_file = os.path.join(path, backup_name)
+
+  shutil.make_archive(complete_backup_file, format='zip', root_dir='bckp_temp')
+  print(f'\033[0;32m[INFO]\033[0m Backup realizado: {complete_backup_file}.zip') 
 
 except KeyError as e:
   print('   \033[0;31m[ERROR]\033[0m Clave no encontrada.' + str(e))
