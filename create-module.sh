@@ -22,10 +22,17 @@ resume_container() {
       if [ "$?" -ne 0 ]; then
           echo -e "\033[0;31m[ERROR]\033[0m" $error_msg
       else
-          echo -e "\033[0;32m[OK]\033[0m Contenedor odoodock-web reiniciado."
+          echo -e "\033[0;32m[OK]\033[0m Contenedor ${PROJECT_NAME}-web reiniciado."
       fi
   fi
 }
+
+test ! -f ./.env && { echo -e "\033[0;31m[ERROR]\033[0m No existe el fichero .env. Saliendo.." ; exit; }
+
+# cargo las variables desde .env y .services
+set -o allexport && source .env && set +o allexport
+
+test -z $PROJECT_NAME && { echo -e "\033[0;31m[ERROR]\033[0m Variable PROJECT_NAME no definida en .env. Saliendo..." ; exit; }
 
 # OPTION es la variable que almacena el item en cada momento
 options=0
@@ -73,35 +80,35 @@ fi
 
 CONTAINER_RUNNING=1
 
-docker volume ls 2>/dev/null | grep -q odoodock_odoo_addons
+docker volume ls 2>/dev/null | grep -q ${PROJECT_NAME}_odoo_addons
 # grep devuelve 0 (éxito) si encuentra algo y 1 si no lo encuentra
 if [ "$?" -ne 0 ]; then 
-  echo -e "\033[0;31m[ERROR]\033[0m No se encuentra el volumen odoodock_oodo_addons."
+  echo -e "\033[0;31m[ERROR]\033[0m No se encuentra el volumen ${PROJECT_NAME}_oodo_addons."
   exit 2
 else 
-  echo -e "\033[0;32m[OK]\033[0m Volumen odoodock_oodo_addons encontrado."
+  echo -e "\033[0;32m[OK]\033[0m Volumen ${PROJECT_NAME}_oodo_addons encontrado."
 fi
 
-# comprobación de si el contenedor odoodock-web está arrancado
+# comprobación de si el contenedor ${PROJECT_NAME}-web está arrancado
 # y en ese caso se pausa
 CONTAINER_RUNNING=0
-docker compose ps 2>/dev/null | grep -q odoodock-web
+docker compose ps 2>/dev/null | grep -q ${PROJECT_NAME}-web
 if [ "$?" -eq 0 ]; then 
     CONTAINER_RUNNING=1
-    echo -e "\033[0;32m[INFO]\033[0m Contenedor odoodock-web corriendo."
+    echo -e "\033[0;32m[INFO]\033[0m Contenedor ${PROJECT_NAME}-web corriendo."
     error_msg=`trap 'exec docker compose stop web 2>&1' EXIT`
     # comprobación del código de error de salida
     if [ "$?" -ne 0 ]; then
         echo -e "\033[0;31m[ERROR]\033[0m" $error_msg
         exit 3
     else
-        echo -e "\033[0;32m[OK]\033[0m Contenedor odoodock-web parado."
+        echo -e "\033[0;32m[OK]\033[0m Contenedor ${PROJECT_NAME}-web parado."
     fi
 fi
 
 # ejecución de la operación
 echo -e "\033[0;32m[INFO]\033[0m Ejecutando acción -> contenedor create_module_odoo"
-error_msg=`trap 'docker run --rm -u odoo --workdir="/mnt/extra-addons" --entrypoint /bin/bash --name create_module_odoo -v odoodock_odoo_addons:/mnt/extra-addons -v odoodock_odoo_data:/var/lib/odoo odoodock-web -c "$command"' EXIT`
+error_msg=`trap 'docker run --rm -u odoo --workdir="/mnt/extra-addons" --entrypoint /bin/bash --name create_module_odoo -v ${PROJECT_NAME}_odoo_addons:/mnt/extra-addons -v ${PROJECT_NAME}_odoo_data:/var/lib/odoo ${PROJECT_NAME}-web -c "$command"' EXIT`
 
 # comprobación del código de error de salida
 if [ "$?" -ne 0 ]; then
@@ -111,7 +118,7 @@ elif [ ! -z $FILE ]; then
   # obtención del nombre del fichero a partir de la ruta
   FILENAME_ZIP=$(basename -- "$FILE")
   echo -e "\033[0;32m[INFO]\033[0m Copiando ficheros de HOST (/tmp/${FILENAME_ZIP%.zip}) -> CONTAINER (/mnt/extra/addons/${FILENAME_ZIP%.zip})"
-  error_msg=`trap 'docker cp /tmp/${FILENAME_ZIP%.zip} odoodock-web-1:/mnt/extra-addons' EXIT`
+  error_msg=`trap 'docker cp /tmp/${FILENAME_ZIP%.zip} ${PROJECT_NAME}-web-1:/mnt/extra-addons' EXIT`
  
   if [ "$?" -ne 0 ]; then
     echo -e "\033[0;31m[ERROR]\033[0m" $error_msg
@@ -119,7 +126,7 @@ elif [ ! -z $FILE ]; then
     # se ha realizado la copia, cambiando los permisos
     resume_container
     echo -e "\033[0;32m[INFO]\033[0m Cambiando propietario"
-    error_msg=`trap 'docker exec -u 0 -it odoodock-web-1 chown 101:101 -R /mnt/extra-addons/${FILENAME_ZIP%.zip}' EXIT`
+    error_msg=`trap 'docker exec -u 0 -it ${PROJECT_NAME}-web-1 chown 101:101 -R /mnt/extra-addons/${FILENAME_ZIP%.zip}' EXIT`
 
     if [ "$?" -ne 0 ]; then
       echo -e "\033[0;31m[ERROR]\033[0m" $error_msg
