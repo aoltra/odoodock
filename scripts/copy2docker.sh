@@ -6,7 +6,7 @@ usage() {
   echo 
   echo -e "Copia en la carpeta DEST de un contenedor los ficheros definidos en SOURCE del host"
   echo -e "  -c: Nombre del servicio destino. Por defecto web"
-  echo -e "  -u: ID del usuario con el que se realizará la copia. Por defecto 101 (odoo en odoodock-web-1)"
+  echo -e "  -u: ID del usuario con el que se realizará la copia. Por defecto 101 (odoo en ${PROJECT_NAME}-web-1)"
   echo
   echo -e "Ejemplo:"
   echo -e "   ./copy2docker.sh ~/data-test /mnt/extra-addons/my-module/extra/"
@@ -18,6 +18,13 @@ exit_abnormal() {
   usage
   exit 1
 }
+
+test ! -f ../.env && { echo -e "\033[0;31m[ERROR]\033[0m No existe el fichero .env. Saliendo.." ; exit; }
+
+# cargo las variables desde .env y .services
+set -o allexport && source ../.env && set +o allexport
+
+test -z $PROJECT_NAME && { echo -e "\033[0;31m[ERROR]\033[0m Variable PROJECT_NAME no definida en .env. Saliendo..." ; exit; }
 
 SERVICE=web
 IDUSER=101
@@ -61,14 +68,14 @@ if [ ! -f "$SOURCE" ] && [ ! -d "$SOURCE" ]; then
   exit_abnormal
 fi
 
-echo -e "\033[0;32m[INFO]\033[0m Copiando ficheros desde HOST (${SOURCE}) -> CONTAINER (odoodock-${SERVICE}-1:${DEST})"
-  error_msg=`trap 'docker cp ${SOURCE} odoodock-${SERVICE}-1:${DEST}' EXIT`
+echo -e "\033[0;32m[INFO]\033[0m Copiando ficheros desde HOST (${SOURCE}) -> CONTAINER (${PROJECT_NAME}-${SERVICE}-1:${DEST})"
+  error_msg=`trap 'docker cp ${SOURCE} ${PROJECT_NAME}-${SERVICE}-1:${DEST}' EXIT`
  
   if [ "$?" -ne 0 ]; then
     echo -e "\033[0;31m[ERROR]\033[0m" $error_msg
   else
     echo -e "\033[0;32m[INFO]\033[0m Cambiando propietario"
-    error_msg=`trap 'docker exec -u 0 -it odoodock-${SERVICE}-1 chown ${IDUSER}:${IDUSER} -R ${DEST}' EXIT`
+    error_msg=`trap 'docker exec -u 0 -it ${PROJECT_NAME}-${SERVICE}-1 chown ${IDUSER}:${IDUSER} -R ${DEST}' EXIT`
 
     if [ "$?" -ne 0 ]; then
       echo -e "\033[0;31m[ERROR]\033[0m" $error_msg
