@@ -10,9 +10,11 @@ hero_height: is-fullwidth
 
 <br>
 
-* #### En ocasiones el contenedor _contenedor odoodock-web-1_ cae o se reinicia
+* #### En ocasiones el contenedor _contenedor [project_name]-web-1_ cae o se reinicia
 
     Generalmente el problema viene por la modificación (nuevo fichero, modificación de alguno de los existentes...) del directorio de _/mnt/extra-addons_ sin haber lanzado el proceso de [depuración](#cómo-depurar-módulos-con-vscode). En general el contenedor debería reinciarse por si solo y sólo requeriría reacargar la ventana del VSCode, pero una opción más sencilla es tener arrancado el proceso de depuración.
+
+    > Nota: _[project_name]_ es el nombre del proyecto (variable _PROJECT_NAME_) definido en el fichero _.env_.
 
 <br>
 
@@ -36,20 +38,28 @@ hero_height: is-fullwidth
 
 * #### ¿ Es posible arrancar dos servicios Odoo de manera simultánea ?
 
-   Sí. Para ello únicamente hay que crear otra carpeta y seguir los pasos del proceso de [instalación](#instalación). 
+   Sí. Para ello únicamente hay que crear otra instalación de Odoodock en una carpeta diferente y seguir los pasos del proceso de [instalación](#instalación). 
    
    A la hora de configurar el sistema existen dos opciones: compartiendo el mismo SGBD o en diferentes SGBD. 
    
-   La configuración del _.env_ usando dos instancias del SGBD (postgres) debe tener en cuenta:
+   En caso de utilizar versiones de Odoo diferentes usando dos instancias del SGBD, la configuración del _.env_ debe de:
+   
+    - Elegir nombres de proyecto (PROJECT_NAME) diferentes en cada carpeta 
+    - Elegir puertos de Odoo y de ssh (ODOO_PORT, OSOO_SSH_PORT) diferentes en cada carpeta
+    - Elegir puertos en los que escucha postgres (ODOO_POSTGRESS_PORT, POSTGRES_PORT) diferentes en cada carpeta
+    - Indicar el nombre del contenedor de la base de datos correcto (ODOO_POSTGRESS_HOST).
+   
+   En el caso de utilizar la misma versión de Odoo usando dos instancias del SGBD (postgres) debe tener en cuenta:
 
-   - Elegir nombres de servidores (ODOO_SERVER_NAME) diferentes en cada carpeta
-   - Elegir puertos de Odoo y de ssh (ODOO_PORT, OSOO_SSH_PORT) diferentes en cada carpeta
-   - Elegir puertos en los que escucha postgres (ODOO_POSTGRESS_PORT, POSTGRES_PORT) diferentes en cada carpeta
-   - Indicar el nombre del contenedor de la base de datos correcto (ODOO_POSTGRESS_HOST)
+    - Elegir nombres de proyecto (PROJECT_NAME) diferentes en cada carpeta (opcional, pero recomendaodo). 
+    - Elegir nombres de servidores (ODOO_SERVER_NAME) diferentes en cada carpeta.
+    - Elegir puertos de Odoo y de ssh (ODOO_PORT, OSOO_SSH_PORT) diferentes en cada carpeta
+    - Elegir puertos en los que escucha postgres (ODOO_POSTGRESS_PORT, POSTGRES_PORT) diferentes en cada carpeta
+    - Indicar el nombre del contenedor de la base de datos correcto (ODOO_POSTGRESS_HOST).
 
-   > Hay que tener en cuenta que en el caso de más de una instancia los contenedores irán sufijados por números enteros secuenciales: _odoodock-web-1_, _odoodock-web-2_, _odoodock-db-1_, _odoodock-db-2_...
+   > Los contenedores que se crean serán sufijados por el valor de la variable _PROJECT_NAME_ (su valor por defecto _odoodock_)
 
-   En caso de que no se requiera que el arranque de los servicios sea simultáneo, para evitar conflictos es recomendable eliminiar todos los volúmenes entre ejecuciones, por ejemplo con _docker compose down -v_ 
+   > En caso de que no se requiera que el arranque de los servicios sea simultáneo, para evitar conflictos es recomendable eliminiar todos los volúmenes entre ejecuciones, por ejemplo con _docker compose down -v_ 
 
 <br>
 

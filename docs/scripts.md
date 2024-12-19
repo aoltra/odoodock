@@ -25,7 +25,9 @@ database_backup -h
 
 __copy2docker__ permite la copia de archivos desde el host al interior de un contenedor cambiando el propietario de los archivos para que puedan ser modificados desde allí.
 
-Por defecto, el script copia al interior del servicio _web_, en concreto al contenedor número _1_ (_odoodock-web-1_) y asigna como propietario al usuario con identificador _101_, que en el caso del servicio _web_ es _odoo_.
+Por defecto, el script copia al interior del servicio _web_, en concreto al contenedor número _1_ (_[project_name]-web-1_) y asigna como propietario al usuario con identificador _101_, que en el caso del servicio _web_ es _odoo_.
+
+> Nota: _[project_name]_ es el nombre del proyecto (variable _PROJECT_NAME_) definido en el fichero _.env_.
 
 Es posible modificar tanto el servicio como el usuario con las opciones _-s_ y _-u_ respectivamente.
 

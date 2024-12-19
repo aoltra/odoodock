@@ -27,10 +27,13 @@ El servicio web es el que se encarga de arrancar odoo.
 
 El servicio permite la instalación de herramientas adicionales de ayuda al desarrollo. En general, el acceso a ellas se realiza accediendo al _bash_ del contenedor mediante el comando _exec_. Por ejemplo:
 
-```
-   $ docker exec -it odoodock-web-1 bash
+   ```
+   $ docker exec -it [project_name]-web-1 bash
    > jekyll new mi_site
    ```
+
+> Nota: _[project_name]_ es el nombre del proyecto (variable _PROJECT_NAME_) definido en el fichero _.env_.
+
 
 #### Oh My ZSH
 

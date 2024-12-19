@@ -13,7 +13,7 @@ La depuración de módulos se realiza aprovechando la características Remote De
 
 El proceso para poder depurar consiste:
 
- 1. Adjuntar a Visual Studio Code el contenedor _odoodock-web-1_. Esa operación abrirá una nueva instancia de _VSCode_ que será desde la que se trabajará.
+ 1. Adjuntar a Visual Studio Code el contenedor _[project_name]-web-1_. Esa operación abrirá una nueva instancia de _VSCode_ que será desde la que se trabajará.
 
  2. Instalar la extensión _Python_
  
