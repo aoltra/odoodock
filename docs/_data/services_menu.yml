@@ -10,5 +10,9 @@
       link: /services/moodle
     - name: mariadb-moodle
       link: /services/mariadb-moodle
+    - name: n8n
+      link: /services/n8n
+    - name: rabbitmq
+      link: /services/rabbitmq
     - name: jekyll
       link: /services/jekyll
