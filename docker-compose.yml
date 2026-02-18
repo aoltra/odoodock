@@ -58,7 +58,18 @@ volumes:
       type: 'none'
       o: 'bind'
       device: ${DATA_PATH_HOST}/pgadmin
-      
+
+  keycloak_data:
+
+  n8n_data:
+
+networks:
+  # Definimos una red donde se conectarán los servicios a los que se 
+  # accederá mediante Traefik siempre que Traefik esté configurado
+  traefik_network:
+    name: traefik_network
+    driver: bridge
+
 services:
   #############################
   ## ODOO #####################
@@ -251,3 +262,150 @@ services:
 
     volumes:
       - 'mariadb_data:/bitnami/mariadb'
+
+  #############################
+  ## N8N ######################
+  #############################
+  n8n:
+    # experimental, soporte para nodos en python
+    # build:
+    #   context: ./n8n
+    #   args:
+    #     - N8N_INSTALL_PYTHON=${N8N_INSTALL_PYTHON}
+
+    image: docker.n8n.io/n8nio/n8n
+    restart: always
+    ports:
+      - "${N8N_PORT}:5678"
+
+    # para ser enrutado desde traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.n8n.rule=Host(`${SUBDOMAIN}.${DOMAIN_NAME}`)"
+      - "traefik.http.routers.n8n.entrypoints=web"
+      - "traefik.http.services.n8n.loadbalancer.server.port=5678"
+
+    environment:
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+      - N8N_HOST=${SUBDOMAIN}.${DOMAIN_NAME}
+      - N8N_PORT=${N8N_PORT}
+      - N8N_PROTOCOL=http
+      - N8N_RUNNERS_ENABLED=true
+      - NODE_ENV=development
+      - WEBHOOK_URL=http://${SUBDOMAIN}.${DOMAIN_NAME}/
+      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
+      - TZ=${GENERIC_TIMEZONE}
+      - NODES_EXCLUDE="[]"
+      # permito el acceso a las variables de entorno
+      - N8N_BLOCK_ENV_ACCESS_IN_NODE=false 
+      # Keycloak credentials
+      - KEYCLOAK_INTERNAL_URL=${KEYCLOAK_INTERNAL_URL}
+      - KEYCLOAK_ADMIN_USER=${KEYCLOAK_ADMIN}
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ${SERVER_INFO_PATH_HOST}/n8n_files:/home/node/.n8n-files
+
+    networks:
+      - traefik_network
+
+  #############################
+  ## RABBITMQ #################
+  #############################
+  rabbitmq:
+    image: rabbitmq:3-management
+  
+    ports:
+      - "${RABBIT_PORT}:5672"         # Puerto de comunicación (AMQP)
+      - "${RABBIT_WEB_PORT}:15672"    # Interfaz Web de administración
+      
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASSWORD}
+
+    volumes:
+    - ./rabbitmq/init-rabbit.sh:/init-rabbit.sh
+
+    # Misma red que traefik
+    networks:
+      - traefik_network
+
+    # para ser enrutado desde traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.rabbitmq.rule=Host(`rabbitmq.local`)"
+      - "traefik.http.services.rabbitmq.loadbalancer.server.port=15672"
+
+  #############################
+  ## TRAEFIK ##################
+  #############################
+  traefik:
+    image: traefik:v3.0
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080" # Dashboard de Traefik
+
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+    networks:
+      - traefik_network
+  
+  #############################
+  ## KEYCLOAK #################
+  #############################
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0
+
+    ports:
+      - "${KEYCLOAK_PORT}:8080"
+
+    command: start-dev --http-relative-path /auth
+
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak_db:5432/${POSTGRES_KEYCLOAK_DB}
+      KC_DB_USERNAME: ${POSTGRES_KEYCLOAK_USER}
+      KC_DB_PASSWORD: ${POSTGRES_KEYCLOAK_PASSWORD}
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME_STRICT: "false"
+      KC_PROXY: edge
+
+    depends_on:
+      - keycloak_db
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.keycloak.rule=Host(`keycloak.local`)"
+      - "traefik.http.routers.keycloak.entrypoints=web"
+      - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
+
+    # lo incluimos en la red de traefik para que pueda comunicarse con él si arranco el servicio
+    networks:
+      - traefik_network
+
+  #############################
+  ## BD KEYCLOAK (postgres) ###
+  #############################
+  keycloak_db:
+    image: postgres:16
+
+    volumes:
+      - keycloak_data:/var/lib/postgresql/data
+
+    environment:
+      POSTGRES_DB: ${POSTGRES_KEYCLOAK_DB}
+      POSTGRES_USER: ${POSTGRES_KEYCLOAK_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_KEYCLOAK_PASSWORD}
+
+    # lo incluimos en la red de traefik para que pueda comunicarse con él si arranco el servicio
+    # OJO! en producción debería ir en una red aislada para que sólo tenga acceso Keycloak
+    networks:
+      - traefik_network

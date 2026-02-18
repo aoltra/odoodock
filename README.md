@@ -9,7 +9,7 @@
 
 - Creación de imagen personalizada con la instalación de varias herramientas de apoyo.
 - Soporte para _odoo_, _odoo shell_ y _scaffolding_
-- Soporte de varios servicios de apoyo: _pgAdmin_, _Jekyll_, _Moodle_...
+- Soporte de varios servicios de apoyo: _pgAdmin_, _Moodle_, _n8n_, _RabbitMQ_...
 - Cada servicio corre en un propio contenedor.
 - Basado en imágenes de confianza.
 - Scripts para la generación automática de módulos por _scaffolding_, clonado de repositorios _git_, descompresión de paquetes.
@@ -17,7 +17,7 @@
 - Configuración de serie para realizar depuración en Visual Studio Code.
 - Fácilmente configurable a través de variables de entorno.
 - Pensado con fines académicos: código muy comentado.
-- Soporte para Odoo versión 14.
+- Soporte para Odoo versión 14-17.
 
 ## Licencia
 

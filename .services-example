@@ -11,6 +11,8 @@ SERVICES=(
   # "jekyll"
   # "moodle"
   # "pgadmin"
-  # "pdf-signature-validator"
+  # "traefik"
+  # "keycloak"
+  # "n8n"
+  # "rabbitmq"
 )
-
