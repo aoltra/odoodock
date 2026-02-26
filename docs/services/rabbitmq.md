@@ -61,6 +61,17 @@ El script permite:
   crear_cola "notifications" "dev.welcome.email.send" "classic"
   ``` 
 
+* Creación y enlazado de exchanges
+
+  ```bash
+  # creación de un exchange tipo topic dev.ex.message.logs 
+  # dentro del host logs
+  crear_exchange "logs" "dev.ex.message.logs" "topic"
+
+  # Enlace con la cola dev.q.message.logs con el filtro #.error (todos las etiquedas que acaben en .error)
+  enlazar_exchange_con_cola "logs" "dev.ex.message.logs" "dev.q.message.logs" "#.error"
+  ``` 
+
 El fichero puede ser editado manualmente y lanzado desde el terminal del contenedor (no es neceasario reiniciarlo ni reconstruirlo).
 
 ```bash
