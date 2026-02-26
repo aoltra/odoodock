@@ -72,6 +72,7 @@ rabbitmqctl add_user n8n_user n8n_password123 || true
 rabbitmqctl set_user_tags n8n_user management
 # usuario puede Crear colas, escribir, leer
 rabbitmqctl set_permissions -p notifications n8n_user ".*" ".*" ".*"
+rabbitmqctl set_permissions -p logs n8n_user ".*" ".*" ".*"
 
 ##
 ## COLAS
