@@ -100,6 +100,8 @@ RUN if [ ${ODOO_INSTALL_ASDF} = true ]; then \
   
 USER root
 
+ENV PIP_BREAK_SYSTEM_PACKAGES=1
+
 ARG ODOO_INSTALL_JEKYLL=false
 # assert Si se quiere instalar jekyll se debe instalar ASDF con ruby
 # la condicion se evalua de izquierda a derecha y en cuanto se pueda decidir si es
@@ -114,6 +116,9 @@ RUN if [ ${ODOO_INSTALL_JEKYLL} = true ]; then \
 
 # instalación del módulo debugpy
 RUN pip3 install debugpy
+
+# instalación del módulo reportlab
+RUN pip3 install reportlab
 
 # creación de la carpeta de almacenamiento de documentos
 ARG REPO_PATH_CONTAINER=/mnt/odoo-repo

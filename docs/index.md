@@ -26,7 +26,7 @@ hero_height: is-fullwidth
 - Configuración de serie para realizar depuración en Visual Studio Code.
 - Fácilmente configurable a través de variables de entorno.
 - Pensado con fines académicos: código muy comentado.
-- Soporte para Odoo versiones 14-17.
+- Soporte para Odoo versiones 14-19.
 
 ### Documentación
 
