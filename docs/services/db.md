@@ -42,14 +42,16 @@ Para crear nuevas bases de datos es necesario incluirlas en el fichero _.databas
    KEYCLOAK:keycloak:secret123
    ```
   donde:
-  * KEYCLOAK: es el nombre de la base de datos
-  * keycloak: el nombre del usuario con acceso total
-  * secret213: contraseña del usuario (no se pueden utilizar los dos puntos ( : ) como parte de la contraseña)
-  * Las líneas que empiezan por # se consideran comentarios
+  
+   - _KEYCLOAK_: es el nombre de la base de datos
+   - _keycloak:_ el nombre del usuario con acceso total
+   - _secret213_: contraseña del usuario (no se pueden utilizar los dos puntos ( : ) como parte de la contraseña)
+   - Las líneas que empiezan por # se consideran comentarios
 
-    > Importante: el nombre de la base de datos puede ser cualquiera, pero si es una base de datos creada para otro servicio de **odoodock** es necesario utilizar el mismo nombre que el utilizado en el fichero _.env_ de configuración. En este caso el definido en la variable `POSTGRES_KEYCLOAK_DB=KEYCLOAK`
 
-    > Importante: el usuario que creará la base de datos es el definido en la variable `POSTGRES_USER` que suele estar asignada a _odoodock_. El usuario creado desde el fichero _.databases_ tendrá permisos totales pero solo sobre la base de datos asociada.
+  > Importante: el nombre de la base de datos puede ser cualquiera, pero si es una base de datos creada para otro servicio de **odoodock** es necesario utilizar el mismo nombre que el utilizado en el fichero _.env_ de configuración. En este caso el definido en la variable `POSTGRES_KEYCLOAK_DB=KEYCLOAK`
+
+  > Importante: el usuario que creará la base de datos es el definido en la variable `POSTGRES_USER` que suele estar asignada a _odoodock_. El usuario creado desde el fichero _.databases_ tendrá permisos totales pero solo sobre la base de datos asociada.
 
 4. a. En el caso de que sea el primer arranque del servicio las bases de datos se crearan al crear la imagen
 

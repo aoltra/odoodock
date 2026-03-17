@@ -10,6 +10,8 @@
       link: /services/moodle
     - name: mariadb-moodle
       link: /services/mariadb-moodle
+    - name: keyckloak
+      link: /services/keycloak
     - name: n8n
       link: /services/n8n
     - name: rabbitmq
