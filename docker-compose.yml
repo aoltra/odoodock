@@ -1,5 +1,3 @@
-version: '3.7'
-
 # Definimos varios volumenes nombrados (odoo_conf, odoo_addons..) 
 # pero que esté enlazado a una carpeta. 
 # De esta manera es posible realizar copias sobre él desde el host
@@ -127,6 +125,9 @@ services:
       - odoo_repo:${REPO_PATH_CONTAINER}    
       - odoo_conf:/etc/odoo
 
+    networks:
+      - traefik_network
+
     deploy:
       restart_policy:
         condition: any
@@ -156,6 +157,9 @@ services:
     # por defecto en la carpeta .odoodock del home del usuario
     volumes:
       - ${DATA_PATH_HOST}/postgres/odoo_${ODOO_VERSION}/${ODOO_SERVER_NAME}:/var/lib/postgresql/data
+      
+    networks:
+      - traefik_network
 
   #################################
   ## PGADMIN ######################
@@ -231,8 +235,8 @@ services:
       # el contenedor de la base de datos
       - MOODLE_DATABASE_HOST=${MOODLE_DATABASE_HOST}
       - MOODLE_DATABASE_PORT_NUMBER=${MOODLE_DATABASE_PORT_NUMBER}
-      - MOODLE_DATABASE_USER=${MOODLE_DATABASE_USER}
-      - MOODLE_DATABASE_NAME=${MOODLE_DATABASE_NAME}
+      - MOODLE_DATABASE_USER=${MARIADB_MOODLE_USER}
+      - MOODLE_DATABASE_NAME=${MARIADB_MOODLE_DATABASE}
       - MOODLE_DATABASE_PASSWORD=${MOODLE_DATABASE_PASSWORD}
 
     volumes:
@@ -369,9 +373,9 @@ services:
 
     environment:
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://keycloak_db:5432/${POSTGRES_KEYCLOAK_DB}
-      KC_DB_USERNAME: ${POSTGRES_KEYCLOAK_USER}
-      KC_DB_PASSWORD: ${POSTGRES_KEYCLOAK_PASSWORD}
+      KC_DB_URL: jdbc:postgresql://db:5432/${POSTGRES_KEYCLOAK_DB}
+      KC_DB_USERNAME: ${POSTGRES_USER}
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
       KC_HTTP_ENABLED: "true"
@@ -379,7 +383,7 @@ services:
       KC_PROXY: edge
 
     depends_on:
-      - keycloak_db
+      - db
 
     labels:
       - "traefik.enable=true"
@@ -388,24 +392,5 @@ services:
       - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
 
     # lo incluimos en la red de traefik para que pueda comunicarse con él si arranco el servicio
-    networks:
-      - traefik_network
-
-  #############################
-  ## BD KEYCLOAK (postgres) ###
-  #############################
-  keycloak_db:
-    image: postgres:16
-
-    volumes:
-      - keycloak_data:/var/lib/postgresql/data
-
-    environment:
-      POSTGRES_DB: ${POSTGRES_KEYCLOAK_DB}
-      POSTGRES_USER: ${POSTGRES_KEYCLOAK_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_KEYCLOAK_PASSWORD}
-
-    # lo incluimos en la red de traefik para que pueda comunicarse con él si arranco el servicio
-    # OJO! en producción debería ir en una red aislada para que sólo tenga acceso Keycloak
     networks:
       - traefik_network
