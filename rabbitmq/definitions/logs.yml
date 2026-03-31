@@ -1,0 +1,31 @@
+# =============================================================================
+# logs.yml — Infraestructura RabbitMQ para logging
+# Vhost: logs
+# =============================================================================
+
+vhost: logs
+
+users:
+  - name: n8n_user
+    password: "${N8N_RABBIT_PASSWORD}"
+    tags: management
+    permissions:
+      - vhost: logs
+        configure: ".*"
+        write: ".*"
+        read: ".*"
+
+exchanges:
+  - name: dev.ex.message.logs
+    type: topic
+    durable: true
+
+queues:
+  - name: dev.q.message.logs
+    type: classic
+    durable: true
+
+bindings:
+  - exchange: dev.ex.message.logs
+    queue: dev.q.message.logs
+    routing_key: "#.error"

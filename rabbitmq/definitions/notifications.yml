@@ -1,0 +1,21 @@
+# =============================================================================
+# notifications.yml — Infraestructura RabbitMQ para notificaciones
+# Vhost: notifications
+# =============================================================================
+
+vhost: notifications
+
+users:
+  - name: n8n_user
+    password: "${N8N_RABBIT_PASSWORD}"   # variable de entorno del .env
+    tags: management
+    permissions:
+      - vhost: notifications
+        configure: ".*"
+        write: ".*"
+        read: ".*"
+
+queues:
+  - name: dev.q.welcome.email.send
+    type: classic
+    durable: true

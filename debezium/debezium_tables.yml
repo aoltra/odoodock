@@ -1,0 +1,26 @@
+# =============================================================================
+# debezium_tables.yml
+# Tablas monitorizadas por Debezium
+# =============================================================================
+# Edita este fichero para añadir o quitar tablas de la monitorización.
+# Ejecutar debezium_generate.py y debezium_sync.sh después de cualquier cambio para aplicarlo.
+#
+# Formato:
+#   databases:
+#     nombre_base_datos:
+#       - schema.tabla
+#
+# El script creará automáticamente:
+#   - El rol debezium_reader si no existe
+#   - Los GRANTs necesarios sobre cada base de datos
+#   - Una publicación por base de datos: debezium_<nombre_bd>_pub
+#   - Añadirá o quitará tablas de publicaciones existentes sin recrearlas
+# =============================================================================
+
+databases:
+  ejemplo_odoo_db:
+    - public.res_users
+    - public.hr_department
+    
+  ejemplo_main_db:
+    - public.users_core

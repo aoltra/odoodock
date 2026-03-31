@@ -18,9 +18,91 @@ mkdir -p $SERVER_INFO_PATH_HOST/n8n_files
 test ! -f ./.services && echo -e "\033[0;32m[INFO]\033[0m No existe el fichero .services. Arrancando todos los servicios" 
 test -z $SERVICES && echo -e "\033[0;32m[INFO]\033[0m Variable SERVICES no definida o sin servicios en .services.  Arrancando todos los servicios"
 
+# pgadmin
+
 if [[ " ${SERVICES[*]} " =~ " pgadmin " ]]; then
   mkdir -p $DATA_PATH_HOST/pgadmin
 fi
 
-echo -e "\033[0;32m[INFO]\033[0m Arrancando los servicios: ${SERVICES[@]}"
-exec docker compose -p "$PROJECT_NAME" up -d "$@" "${SERVICES[@]}"
+# debezium
+
+DEBEZIUM_COMPOSE_FILE="docker-compose.debezium.yml"
+DEBEZIUM_GENERATE_SCRIPT="debezium/debezium_generate.py"
+COMPOSE_FILES=("-f" "docker-compose.yml")   # ficheros compose a combinar
+
+if [[ " ${SERVICES[*]} " =~ " debezium " ]]; then
+    echo -e "\033[0;32m[INFO]\033[0m Debezium activado."
+    export ENABLE_DEBEZIUM=true
+ 
+    # Regenerar configuraciones si el script existe y el yml de tablas es más
+    # reciente que el compose generado (o si el compose no existe todavía)
+    if [[ -f "$DEBEZIUM_GENERATE_SCRIPT" ]]; then
+        TABLES_YML="debezium/debezium_tables.yml"
+        if [[ ! -f "$DEBEZIUM_COMPOSE_FILE" ]] || \
+           [[ "$TABLES_YML" -nt "$DEBEZIUM_COMPOSE_FILE" ]]; then
+            echo -e "\033[0;32m[INFO]\033[0m debezium_tables.yml modificado — regenerando configuraciones..."
+            python3 "$DEBEZIUM_GENERATE_SCRIPT" \
+                --tables-yml "$TABLES_YML" \
+                --compose-out "$DEBEZIUM_COMPOSE_FILE"
+        else
+            echo -e "\033[0;32m[INFO]\033[0m Configuraciones Debezium actualizadas, no es necesario regenerar."
+        fi
+    fi
+ 
+    # Verificar que el fichero compose de Debezium existe
+    if [[ ! -f "$DEBEZIUM_COMPOSE_FILE" ]]; then
+        echo -e "\033[0;31m[ERROR]\033[0m No se encontró $DEBEZIUM_COMPOSE_FILE."
+        echo -e "\033[0;31m[ERROR]\033[0m Ejecuta primero: python3 $DEBEZIUM_GENERATE_SCRIPT"
+        exit 1
+    fi
+ 
+    # Añadir el fichero compose de Debezium a la lista
+    COMPOSE_FILES+=("-f" "$DEBEZIUM_COMPOSE_FILE")
+ 
+    # Crear directorios de datos para cada servicio Debezium
+    # Los lee directamente del compose generado para no hardcodear nada
+    if command -v python3 &>/dev/null; then
+        python3 - "$DEBEZIUM_COMPOSE_FILE" "$DATA_PATH_HOST" <<'EOF'
+import yaml, sys, os
+from pathlib import Path
+ 
+compose_file = sys.argv[1]
+data_path    = sys.argv[2]
+ 
+with open(compose_file) as f:
+    compose = yaml.safe_load(f)
+ 
+services = compose.get("services", {})
+for svc_name, svc in services.items():
+    for vol in svc.get("volumes", []):
+        # Los volúmenes de datos de Debezium tienen la forma:
+        # ${DATA_PATH_HOST}/debezium/<db>:/debezium/data
+        src = vol.split(":")[0] if isinstance(vol, str) else ""
+        src = src.replace("${DATA_PATH_HOST}", data_path)
+        if "/debezium/" in src and not src.startswith("./"):
+            Path(src).mkdir(parents=True, exist_ok=True)
+            print(f"  Directorio: {src}")
+EOF
+    fi
+ 
+    # Quitar 'debezium' de SERVICES — no es un servicio real en el compose principal
+    # Los servicios reales se llaman debezium-<db> y están en el compose generado
+    SERVICES=("${SERVICES[@]/debezium/}")
+    # Añadir todos los servicios Debezium del fichero generado
+    DEBEZIUM_SERVICES=$(python3 -c "
+import yaml, sys
+with open('$DEBEZIUM_COMPOSE_FILE') as f:
+    c = yaml.safe_load(f)
+print(' '.join(c.get('services', {}).keys()))
+" 2>/dev/null)
+    SERVICES+=($DEBEZIUM_SERVICES)
+    echo -e "\033[0;32m[INFO]\033[0m Servicios Debezium añadidos: $DEBEZIUM_SERVICES"
+ 
+else
+    export ENABLE_DEBEZIUM=false
+fi
+ 
+# Arrancar 
+echo -e "\033[0;32m[INFO]\033[0m Arrancando los servicios: ${SERVICES[*]}"
+exec docker compose -p "$PROJECT_NAME" "${COMPOSE_FILES[@]}" up -d "$@" "${SERVICES[@]}"
+ 

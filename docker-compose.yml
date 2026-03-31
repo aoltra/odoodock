@@ -152,11 +152,24 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - ENABLE_DEBEZIUM=${ENABLE_DEBEZIUM:-false}
 
     # Mapeamos el directorio del contenedor "var/lib/postgresql/data" en un directorio local
     # por defecto en la carpeta .odoodock del home del usuario
     volumes:
       - ${DATA_PATH_HOST}/postgres/odoo_${ODOO_VERSION}/${ODOO_SERVER_NAME}:/var/lib/postgresql/data
+      - ./postgres/debezium.conf:/etc/postgresql/debezium.conf:ro
+
+    # configuramos el wal_level a logical para soporte con debezium
+    # el incremento de carga es pequeño, pero si, aun así, no se quiere
+    # arrancar debezium habrá que eliminar el apartado y reconstruir 
+    # la imagen
+    command: >
+      postgres
+      -c wal_level=logical
+      -c max_replication_slots=5
+      -c max_wal_senders=5
+      -c wal_keep_size=1024
       
     networks:
       - traefik_network
@@ -317,7 +330,8 @@ services:
   ## RABBITMQ #################
   #############################
   rabbitmq:
-    image: rabbitmq:3-management
+    build:
+      context: ./rabbitmq
   
     ports:
       - "${RABBIT_PORT}:5672"         # Puerto de comunicación (AMQP)
@@ -328,7 +342,8 @@ services:
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASSWORD}
 
     volumes:
-    - ./rabbitmq/init-rabbit.sh:/init-rabbit.sh
+      - ./rabbitmq/init-rabbit.sh:/init-rabbit.sh
+      - ./rabbitmq/definitions:/definitions
 
     # Misma red que traefik
     networks:
@@ -369,6 +384,7 @@ services:
     ports:
       - "${KEYCLOAK_PORT}:8080"
 
+    # arranca en desarrollo
     command: start-dev --http-relative-path /auth
 
     environment:

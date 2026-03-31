@@ -15,4 +15,5 @@ SERVICES=(
   # "keycloak"
   # "n8n"
   # "rabbitmq"
+  # "debezium"
 )

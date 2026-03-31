@@ -1,2 +1,6 @@
 .env
 .services
+
+# Ficheros generados por debezium_generate.py
+docker-compose.debezium.yml
+debezium/conf/*/application.properties

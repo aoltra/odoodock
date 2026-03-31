@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# Crea bases de datos en el servicio PostgreSQL
 set -e
 
 # Función para procesar cada línea

@@ -1,2 +1,2 @@
 # lista de bases de datos:usuario:contraseña a crear en el contenedor
-#KEYCLOAK:keycloak:secret123
+#keycloak_db:keycloak:secret123
