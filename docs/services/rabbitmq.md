@@ -27,58 +27,21 @@ Agente de mensajes (message broker) de código abierto, distribuido y de alto re
 
 ### Creación de colas
 
-La creación de colas se puede realizar desde el script _/rabbitmq/init-rabbit.sh_.
+La creación de vhost,exchanges y colas se puede realizar desde el script _/rabbitmq/init-rabbit.sh_.
 
-El script permite:
+La definición de los elementos a creaer se realiza desde la carpeta _/rabbitmq/definitions_, creando un fichero en formato _yml_ para cada infraestrutura de colas que se desee. _/rabbitmq/init-rabbit.sh_ leerá todos los los ficheros que existan en la carpeta.
 
-* Crear Virtual Hosts
+> Debezium, crea su propio fichero de definiciones a través del fichero _debezium/debezium_generate.py_. Ver la [documentación de Debezium](/odoodock/services/debezium) para más información.
 
-  ```bash
-  # Creación de Virtual Host llamado notifications
-  rabbitmqctl add_vhost notifications || true
-  ``` 
+Cada fichero puede definir vhost, users, queues, exchanges y bindings.
 
-* Crear usuarios
 
-  ```bash
-  # creación de un usuario n8n_user
-  rabbitmqctl add_user n8n_user n8n_password123 || true
-  ``` 
-
-* Asignar permisos
-
-  ```bash
-  # asignación de permisos en el host notifications al usuario n89n_user
-  # se le asignan pernmisos de creación, escritura y lectura
-  rabbitmqctl set_permissions -p notifications n8n_user ".*" ".*" ".*"
-  ``` 
-   
-* Creación de colas 
-
-  ```bash
-  # creación de la cola de tipo classic dev.welcome.email.send 
-  # dentro del host notifications
-  crear_cola "notifications" "dev.welcome.email.send" "classic"
-  ``` 
-
-* Creación y enlazado de exchanges
-
-  ```bash
-  # creación de un exchange tipo topic dev.ex.message.logs 
-  # dentro del host logs
-  crear_exchange "logs" "dev.ex.message.logs" "topic"
-
-  # Enlace con la cola dev.q.message.logs con el filtro #.error (todos las etiquedas que acaben en .error)
-  enlazar_exchange_con_cola "logs" "dev.ex.message.logs" "dev.q.message.logs" "#.error"
-  ``` 
-
-El fichero puede ser editado manualmente y lanzado desde el terminal del contenedor (no es neceasario reiniciarlo ni reconstruirlo).
+El script se lanza el terminal del contenedor (no es neceasario reiniciarlo ni reconstruirlo).
 
 ```bash
-docker exec -it odoodock-rabbitmq-1 bash
 # desde el contenedor
-# admin admin es el usuario y contraseña del usuario que creará los virtual host y las tablas
-/bin/bash init-rabbit.sh admin admin
+# admin admin es el usuario y contraseña del usuario que 
+ddocker exec odoodock-rabbitmq-1 bash /init-rabbit.sh admin admin
 ``` 
 
 > IMPORTANTE: el usuario debe tener permisos para crear colas en un _Virtual Host_ específico. No por ser administrador es posible crear colas en un _Virtual Host_ si no se ha espcificado explícitamente.

@@ -71,6 +71,17 @@ hero_height: is-fullwidth
 
 <br>
 
+* #### Keycloak no arranca, ¿qué puede pasar?
+
+   Las razones principales son que:
+   
+   * Que no se haya creado la base de datos. Consulta com crear la bse de datos en al configuracón de postgres.
+   
+   * Que sí se haya creado pero que keycloal pero posteriormente al arranque de keycloak. Simplemente hay que rearrancar los servidores.
+   
+
+<br>
+
 * #### ¿ Es posible utilizar el servicio Jekyll para trabajar simultáneamente con más de un sitio web ?
 
    Sí. Aunque el servicio jekyll está pensado para dar soporte a un único site, en caso de querer trabajar simultánemente con más de uno es posible arrancar varias instancias del servicio utilizando el parámetro _--scale_.

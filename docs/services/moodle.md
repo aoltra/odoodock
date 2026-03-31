@@ -17,7 +17,7 @@ Sistema de gestión de cursos online (CMS)
 
 2. Ejecutar _./up.sh_ desde la carpeta _odoodock_.
 
-3. Abrir el navegador y acceder a la URL _http://locahost:8080_.
+3. Abrir el navegador y acceder a la URL _http://locahost:8085_.
 
 4. En la página de login usar como credenciales por defecto:
 

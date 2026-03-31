@@ -41,7 +41,7 @@ Para crear nuevas bases de datos es necesario incluirlas en el fichero _.databas
    # lista de bases de datos:usuario:contraseña a crear en el contenedor
    KEYCLOAK:keycloak:secret123
    ```
-  donde:
+   donde:
   
    - _KEYCLOAK_: es el nombre de la base de datos
    - _keycloak:_ el nombre del usuario con acceso total
@@ -49,27 +49,29 @@ Para crear nuevas bases de datos es necesario incluirlas en el fichero _.databas
    - Las líneas que empiezan por # se consideran comentarios
 
 
-  > Importante: el nombre de la base de datos puede ser cualquiera, pero si es una base de datos creada para otro servicio de **odoodock** es necesario utilizar el mismo nombre que el utilizado en el fichero _.env_ de configuración. En este caso el definido en la variable `POSTGRES_KEYCLOAK_DB=KEYCLOAK`
+   > Importante: el nombre de la base de datos puede ser cualquiera, pero si es una base de datos creada para otro servicio de **odoodock** es necesario utilizar el mismo nombre que el utilizado en el fichero _.env_ de configuración. En este caso el definido en la variable `POSTGRES_KEYCLOAK_DB=KEYCLOAK`
 
-  > Importante: el usuario que creará la base de datos es el definido en la variable `POSTGRES_USER` que suele estar asignada a _odoodock_. El usuario creado desde el fichero _.databases_ tendrá permisos totales pero solo sobre la base de datos asociada.
+   > Importante: el usuario que creará la base de datos es el definido en la variable `POSTGRES_USER` que suele estar asignada a _odoodock_. El usuario creado desde el fichero _.databases_ tendrá permisos totales pero solo sobre la base de datos asociada.
 
-4. a. En el caso de que sea el primer arranque del servicio las bases de datos se crearan al crear la imagen
+4. Crear las bases de datos 
 
-4. b. En el caso que se ya se haya arrancado previamente
+   > En el caso de que sea el primer arranque (la imagen no está contruida) del servicio las bases de datos se crearan al crear la imagen
 
-   * 4b.1 Reconstruir la imagen. Desde la carpeta _odoodock_
+   En el caso que se ya se haya arrancado previamente hay dos opciones:
+
+   * a) Reconstruir la imagen. Desde la carpeta _odoodock_
 
      ```bash
      $ docker compose build db 
      ```
+     
+   * b) Actualizar el fichero _databases_ de dentro del contenedor
 
-     o actualizar el fichero _databases_ de dentro del contenedor
+     ```bash
+     $ docker cp .databases db:/tmp/.databases
+     ```
 
-    ```bash
-    $ docker cp .databases db:/tmp/.databases
-    ```
-
-   * 4b.2 Ejecutar el fichero de creación de bases de datos. Desde la carpeta _odoodock_
+     Ejecutar el fichero de creación de bases de datos. Desde la carpeta _odoodock_
 
      ```bash
      $ docker compose exec db bash /docker-entrypoint-initdb.d/init-databases.sh
@@ -80,5 +82,7 @@ Para crear nuevas bases de datos es necesario incluirlas en el fichero _.databas
 
    ```bash
    $ docker exec -it odoodock-db-1 psql -U odoodock --dbname postgres
-   postgres=# \l
+   > postgres=# \l
    ```
+
+> MUY IMPORTANTE. Si se utiliza este servicio para dar soporte a otros servicios, por ejemplo _keycloak_, si para crear la bd no se ha reconstruido la imagen es posible que el servicio no arranque correctamente ya que la base de datos no estaría creada. La solución más sencilla consiste en reiniciar los contenedores.

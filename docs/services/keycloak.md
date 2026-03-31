@@ -19,3 +19,4 @@ hero_height: is-fullwidth
 
 3. Abrir el navegador y acceder a la URL _http://locahost:8080/auth_.
 
+> MUY IMPORTANTE. Si se utiliza el servicio db para dar soporte éste, si para crear la bd no se ha reconstruido la imagen de _postgres_ es posible que el servicio no arranque correctamente ya que la base de datos no estaría creada. La solución más sencilla consiste en reiniciar los contenedores.
