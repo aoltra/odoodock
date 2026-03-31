@@ -1,6 +1,6 @@
 #!/bin/bash
 # =============================================================================
-# init-rabbit.sh — Maya AQSS
+# init-rabbit.sh — Odoodock
 # Inicializa RabbitMQ leyendo ficheros de definición en definitions/
 # =============================================================================
 # Uso (desde dentro del contenedor o desde el host vía docker exec):
@@ -14,7 +14,7 @@
 #   - Bindings exchange → cola
 #
 # Es idempotente: puede ejecutarse varias veces sin efecto secundario.
-# Para aplicar solo un fichero: --file definitions/maya_sync.yml
+# Para aplicar solo un fichero: --file definitions/odoodock_sync.yml
 # =============================================================================
 
 set -euo pipefail

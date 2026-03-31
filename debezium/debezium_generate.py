@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # =============================================================================
 # debezium_generate.py
-# Maya AQSS — Generador de configuraciones Debezium
+# Odoodock — Generador de configuraciones Debezium
 # =============================================================================
 # Lee debezium_tables.yml y genera:
 #   - Un application.properties por base de datos en debezium/conf/<db>/
