@@ -1,13 +1,21 @@
 #!/bin/bash
 
-test ! -f ./.env && { echo -e "\033[0;31m[ERROR]\033[0m No existe el fichero .env. Saliendo.." ; exit; }
+# Colores 
+RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'
+BLUE='\033[0;34m'; CYAN='\033[0;36m'; NC='\033[0m'
+info()    { echo -e "${BLUE}[INFO]${NC}  $*"; }
+success() { echo -e "${GREEN}[OK]${NC}    $*"; }
+warn()    { echo -e "${YELLOW}[WARN]${NC}  $*"; }
+error()   { echo -e "${RED}[ERROR]${NC} $*" >&2; }
 
-# cargo las variables desde .env y .services
-set -o allexport && source .env && source .services &>/dev/null && set +o allexport 
+test ! -f ./.env && { error "No existe el fichero .env. Saliendo.." ; exit; }
 
-test -z $SERVER_INFO_PATH_HOST && { echo -e "\033[0;31m[ERROR]\033[0m Variable SERVER_INFO_PATH_HOST no definida en .env. Saliendo..." ; exit; }
-test -z $APP_MODULE_PATH_HOST && { echo -e "\033[0;31m[ERROR]\033[0m Variable APP_MODULE_PATH_HOST no definida en .env. Saliendo..." ; exit; }
-test -z $DATA_PATH_HOST && { echo -e "\033[0;31m[ERROR]\033[0m Variable DATA_PATH_HOST no definida en .env. Saliendo..." ; exit; }
+# cargo las variables desde .env y .services, tanto del raiz como de los servicios adicionales
+set -o allexport && source .env && source .services &>/dev/null && source ./[ads]/.env &>/dev/null && source ./[ads]/.services &>/dev/null && set +o allexport
+
+test -z $SERVER_INFO_PATH_HOST && { error "Variable SERVER_INFO_PATH_HOST no definida en .env. Saliendo..." ; exit; }
+test -z $APP_MODULE_PATH_HOST && { error "Variable APP_MODULE_PATH_HOST no definida en .env. Saliendo..." ; exit; }
+test -z $DATA_PATH_HOST && { error "Variable DATA_PATH_HOST no definida en .env. Saliendo..." ; exit; }
 
 # se crean, si no existen, los directorios de trabajo
 mkdir -p $SERVER_INFO_PATH_HOST/odoo/{logs,repo,config}
@@ -15,23 +23,30 @@ mkdir -p $APP_MODULE_PATH_HOST
 mkdir -p $DATA_PATH_HOST/odoo/$ODOO_VERSION/$ODOO_SERVER_NAME
 mkdir -p $SERVER_INFO_PATH_HOST/n8n_files
 
-test ! -f ./.services && echo -e "\033[0;32m[INFO]\033[0m No existe el fichero .services. Arrancando todos los servicios" 
-test -z $SERVICES && echo -e "\033[0;32m[INFO]\033[0m Variable SERVICES no definida o sin servicios en .services.  Arrancando todos los servicios"
+test ! -f ./.services && info "No existe el fichero .services. Arrancando todos los servicios" 
+test -z $SERVICES && info "Variable SERVICES no definida o sin servicios en .services.  Arrancando todos los servicios"
+
+COMPOSE_FILES=("-f" "docker-compose.yml")   # ficheros compose a combinar
 
 # pgadmin
-
 if [[ " ${SERVICES[*]} " =~ " pgadmin " ]]; then
   mkdir -p $DATA_PATH_HOST/pgadmin
 fi
 
-# debezium
+# servicio adicionales
+if [ -f "./[ads]/additional-services-compose.yml" ]; then
+    info "Incluyendo servicios opcionales..."
+    COMPOSE_FILES+=("-f" "./[ads]/additional-services-compose.yml")
+else
+    warn "No hay servicios adicionales..."
+fi
 
+# debezium
 DEBEZIUM_COMPOSE_FILE="docker-compose.debezium.yml"
 DEBEZIUM_GENERATE_SCRIPT="debezium/debezium_generate.py"
-COMPOSE_FILES=("-f" "docker-compose.yml")   # ficheros compose a combinar
 
 if [[ " ${SERVICES[*]} " =~ " debezium " ]]; then
-    echo -e "\033[0;32m[INFO]\033[0m Debezium activado."
+    info "Debezium activado."
     export ENABLE_DEBEZIUM=true
  
     # Regenerar configuraciones si el script existe y el yml de tablas es más
@@ -40,19 +55,19 @@ if [[ " ${SERVICES[*]} " =~ " debezium " ]]; then
         TABLES_YML="debezium/debezium_tables.yml"
         if [[ ! -f "$DEBEZIUM_COMPOSE_FILE" ]] || \
            [[ "$TABLES_YML" -nt "$DEBEZIUM_COMPOSE_FILE" ]]; then
-            echo -e "\033[0;32m[INFO]\033[0m debezium_tables.yml modificado — regenerando configuraciones..."
+            info "debezium_tables.yml modificado — regenerando configuraciones..."
             python3 "$DEBEZIUM_GENERATE_SCRIPT" \
                 --tables-yml "$TABLES_YML" \
                 --compose-out "$DEBEZIUM_COMPOSE_FILE"
         else
-            echo -e "\033[0;32m[INFO]\033[0m Configuraciones Debezium actualizadas, no es necesario regenerar."
+            info "Configuraciones Debezium actualizadas, no es necesario regenerar."
         fi
     fi
  
     # Verificar que el fichero compose de Debezium existe
     if [[ ! -f "$DEBEZIUM_COMPOSE_FILE" ]]; then
-        echo -e "\033[0;31m[ERROR]\033[0m No se encontró $DEBEZIUM_COMPOSE_FILE."
-        echo -e "\033[0;31m[ERROR]\033[0m Ejecuta primero: python3 $DEBEZIUM_GENERATE_SCRIPT"
+        error "No se encontró $DEBEZIUM_COMPOSE_FILE."
+        error "Ejecuta primero: python3 $DEBEZIUM_GENERATE_SCRIPT"
         exit 1
     fi
  
@@ -96,13 +111,13 @@ with open('$DEBEZIUM_COMPOSE_FILE') as f:
 print(' '.join(c.get('services', {}).keys()))
 " 2>/dev/null)
     SERVICES+=($DEBEZIUM_SERVICES)
-    echo -e "\033[0;32m[INFO]\033[0m Servicios Debezium añadidos: $DEBEZIUM_SERVICES"
+    info "Servicios Debezium añadidos: $DEBEZIUM_SERVICES"
  
 else
     export ENABLE_DEBEZIUM=false
 fi
  
-# Arrancar 
-echo -e "\033[0;32m[INFO]\033[0m Arrancando los servicios: ${SERVICES[*]}"
-exec docker compose -p "$PROJECT_NAME" "${COMPOSE_FILES[@]}" up -d "$@" "${SERVICES[@]}"
+# Arrancando contenedores
+info "Arrancando los servicios: ${SERVICES[*]} ${ADSSERVICES[*]}"
+exec docker compose -p "$PROJECT_NAME" "${COMPOSE_FILES[@]}" up -d "$@" ${SERVICES[@]} ${ADSSERVICES[@]}
  
