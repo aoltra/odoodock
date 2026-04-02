@@ -15,6 +15,7 @@ _Odoodock_ permite arrqncar servicios que no estén incluidos en su código.
 
 La forma más habitual de añadir nuevos servicios es la creación de un repositorio git con uina esctrutura similar a la de _odoodock_. Por ejemplo, para un repo llamado `odoodock-additional-services`, con dos servicios (`servicio_1` y `servicios_2`).
 
+```text
 odoodock-additional-services/
 │
 ├── servicio_1/                            # Carpeta con información para el servicio 1
@@ -27,6 +28,7 @@ odoodock-additional-services/
 ├── .env                                   # Variables de entorno para los servicios
 ├── .services                              # Fichero de configuración de qué servicios deben arrancar
 └── additional-services-compose.yml        # docker compose de los servicios del repositorio
+```
 
 #### additional-services-compose.yml
 
