@@ -7,7 +7,7 @@ vhost: logs
 
 users:
   - name: n8n_user
-    password: "${N8N_RABBIT_PASSWORD}"
+    password: secret
     tags: management
     permissions:
       - vhost: logs

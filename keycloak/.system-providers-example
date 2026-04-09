@@ -1,0 +1,4 @@
+keycloak-webhook-provider-core-all.jar|https://github.com/vymalo/keycloak-webhook/releases/download/v0.10.0-rc.1/keycloak-webhook-provider-core-0.10.0-rc.1-all.jar
+keycloak-webhook-provider-ampq-all.jar|https://github.com/vymalo/keycloak-webhook/releases/download/v0.10.0-rc.1/keycloak-webhook-provider-amqp-0.10.0-rc.1-all.jar
+keycloak-webhook-provider-http-all.jar|https://github.com/vymalo/keycloak-webhook/releases/download/v0.10.0-rc.1/keycloak-webhook-provider-http-0.10.0-rc.1-all.jar
+keycloak-webhook-provider-syslog-all.jar|https://github.com/vymalo/keycloak-webhook/releases/download/v0.10.0-rc.1/keycloak-webhook-provider-syslog-0.10.0-rc.1-all.jar

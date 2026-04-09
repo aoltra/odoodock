@@ -334,9 +334,9 @@ services:
       context: ./rabbitmq
   
     ports:
-      - "${RABBIT_PORT}:5672"         # Puerto de comunicación (AMQP)
-      - "${RABBIT_WEB_PORT}:15672"    # Interfaz Web de administración
-      
+      - "${RABBITMQ_PORT}:5672"         # Puerto de comunicación (AMQP)
+      - "${RABBITMQ_WEB_PORT}:15672"    # Interfaz Web de administración
+
     environment:
       - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASSWORD}
@@ -386,17 +386,23 @@ services:
 
     # arranca en desarrollo
     command: start-dev --http-relative-path /auth
+    
+    env_file:
+      - ./keycloak/.env-keycloak
+
+    volumes:
+      - ./keycloak/providers:/opt/keycloak/providers/
 
     environment:
-      KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://db:5432/${POSTGRES_KEYCLOAK_DB}
-      KC_DB_USERNAME: ${POSTGRES_USER}
-      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
-      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
-      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
-      KC_HTTP_ENABLED: "true"
-      KC_HOSTNAME_STRICT: "false"
-      KC_PROXY: edge
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://db:5432/${POSTGRES_KEYCLOAK_DB}
+      - KC_DB_USERNAME=${POSTGRES_USER}
+      - KC_DB_PASSWORD=${POSTGRES_PASSWORD}
+      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+      - KC_HTTP_ENABLED=true
+      - KC_HOSTNAME_STRICT=false
+      - KC_PROXY=edge
 
     depends_on:
       - db

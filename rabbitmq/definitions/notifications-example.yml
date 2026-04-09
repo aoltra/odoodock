@@ -7,7 +7,7 @@ vhost: notifications
 
 users:
   - name: n8n_user
-    password: "${N8N_RABBIT_PASSWORD}"   # variable de entorno del .env
+    password: secret
     tags: management
     permissions:
       - vhost: notifications

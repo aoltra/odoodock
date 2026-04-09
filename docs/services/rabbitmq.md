@@ -22,7 +22,7 @@ Agente de mensajes (message broker) de código abierto, distribuido y de alto re
         Username : admin 
         Password : admin
 
-5. El puerto para la comunicación con las colas es por defecto el 5672 o el configurado en la variable `$RABBIT_PORT`
+5. El puerto para la comunicación con las colas es por defecto el 5672 o el configurado en la variable `$RABBITMQ_PORT`
 
 
 ### Creación de colas

@@ -1,0 +1,39 @@
+# =============================================================================
+# keycloak.yml — Infraestructura RabbitMQ para el procesamiento de datos con keycloak
+# Vhost: keycloak
+# =============================================================================
+
+vhost: keycloak
+
+users:
+  - name: n8n_user
+    password: secret
+    tags: management
+    permissions:
+      - vhost: keycloak
+        configure: ".*"
+        write: ".*"
+        read: ".*"
+
+queues:
+  - name: dev.q.keycloak.newuser
+    type: classic
+    durable: true
+    
+  - name: dev.q.keycloak.updateuser
+    type: classic
+    durable: true
+    
+exchanges:
+  - name: dev.ex.keycloak.events
+    type: topic
+    durable: true
+
+bindings:
+  - exchange: dev.ex.keycloak.events
+    queue: dev.q.keycloak.newuser
+    routing_key: "#.newuser"
+    
+  - exchange: dev.ex.keycloak.events
+    queue: dev.q.keycloak.updateuser
+    routing_key: "#.updateuser"
