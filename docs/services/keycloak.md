@@ -20,3 +20,31 @@ hero_height: is-fullwidth
 3. Abrir el navegador y acceder a la URL _http://locahost:8080/auth_.
 
 > MUY IMPORTANTE. Si se utiliza el servicio db para dar soporte éste, si para crear la bd no se ha reconstruido la imagen de _postgres_ es posible que el servicio no arranque correctamente ya que la base de datos no estaría creada. La solución más sencilla consiste en reiniciar los contenedores.
+
+### Configuración de providers
+
+Es posible extender _keycloak_ con extensiones proporcionadas por proveedores de servicios.
+
+Su configuración consiste en:
+
+1. Modificar el fichero _.system-providers_ para añadir por cada fila el nombre y la url de descarga del plugin.
+
+2. Modificar el fichero _.system-providers-variables-example_ para añadir, en formato _.env_ (`NOMBRE_VARIABLE=valor`), las variables de configuración del plugin.
+
+3. Dar permisos de ejecución al fichero `./keycloak/setup_spis.sh`
+
+   ```bash
+   chmod +x ./keycloak/setup_spis.sh 
+   ```
+
+4. Ejecutar el script.
+
+   ```bash
+   cd keycloak
+   ./setup_spis.sh 
+   ```
+
+> IMPORTANTE. En modo desarrollo (_start-dev_) _keycloak_ recarga la configuración y los providers cada vez que reinicia el contenedor.
+
+> Ciertos plugins pueden requerir de configuraciones previas de otros ervicvios, por ejemplo de colas de Rabbit. Sin esas configuraciones los plugins pueden dar errores. En ese caso es conveniente visualizar el log.
+
