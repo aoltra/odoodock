@@ -29,7 +29,7 @@ hero_height: is-fullwidth
          "request": "attach",
          "connect": {
                "host": "localhost",
-               "port": 5678
+               "port": 6789
             },
          "justMyCode": False
       },

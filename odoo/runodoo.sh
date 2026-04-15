@@ -22,4 +22,4 @@ check_config "db_password" "$PASSWORD"
 
 # ejecuta odoo a través del módulo debugpy para poder ser depurado adjutando los módulos
 # $@ es una lista con los parámetros que entran a este script 
-exec python3 -m debugpy --listen 5678 /usr/bin/odoo "$@" "${DB_ARGS[@]}" --dev=all 
+exec python3 -m debugpy --listen 6789 /usr/bin/odoo "$@" "${DB_ARGS[@]}" --dev=all 
