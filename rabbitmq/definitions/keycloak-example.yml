@@ -16,11 +16,7 @@ users:
         read: ".*"
 
 queues:
-  - name: dev.q.keycloak.newuser
-    type: classic
-    durable: true
-    
-  - name: dev.q.keycloak.updateuser
+  - name: dev.q.keycloak
     type: classic
     durable: true
     
@@ -29,11 +25,8 @@ exchanges:
     type: topic
     durable: true
 
+# todos los mensajes del exchange dev.ex.keycloak.events a la misma cola
 bindings:
   - exchange: dev.ex.keycloak.events
-    queue: dev.q.keycloak.newuser
-    routing_key: "#.newuser"
-    
-  - exchange: dev.ex.keycloak.events
-    queue: dev.q.keycloak.updateuser
-    routing_key: "#.updateuser"
+    queue: dev.q.keycloak
+    routing_key: "#"
