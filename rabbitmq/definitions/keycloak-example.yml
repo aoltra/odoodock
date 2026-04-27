@@ -6,7 +6,7 @@
 vhost: keycloak
 
 users:
-  - name: n8n_user
+  - name: user_worker
     password: secret
     tags: management
     permissions:
@@ -17,6 +17,10 @@ users:
 
 queues:
   - name: dev.q.keycloak
+    type: classic
+    durable: true
+
+  - name: dev.q.keycloak.failed
     type: classic
     durable: true
     
