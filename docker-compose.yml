@@ -114,6 +114,17 @@ services:
       - USER=${ODOO_POSTGRESS_USER}
       - PASSWORD=${ODOO_POSTGRESS_PASSWORD}
       - PORT=${ODOO_POSTGRESS_PORT}
+      # configuración de inicialización automática de base de datos
+      - ODOO_VERSION=${ODOO_VERSION}
+      - ODOO_DB_NAME=${ODOO_DB_NAME}
+      - ODOO_MASTER_PASSWORD=${ODOO_MASTER_PASSWORD}
+      - ODOO_DB_LANGUAGE=${ODOO_DB_LANGUAGE}
+      - ODOO_DB_COUNTRY=${ODOO_DB_COUNTRY}
+      - ODOO_ADMIN_EMAIL=${ODOO_ADMIN_EMAIL}
+      - ODOO_ADMIN_PASSWORD=${ODOO_ADMIN_PASSWORD}
+      - ODOO_DB_WITH_DEMO=${ODOO_DB_WITH_DEMO}
+      - ODOO_GIT_REPOS=${ODOO_GIT_REPOS}
+      - ODOO_INIT_MODULES=${ODOO_INIT_MODULES}
 
     # Mapeamos el directorio de los modulos (como por ejemplo "/mnt/extra-addons")
     # en un directorio local, por defecto en el carpeta ../addons del directorio 

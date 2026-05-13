@@ -14,7 +14,7 @@ function check_config() {
     DB_ARGS+=("--${param}")
     DB_ARGS+=("${value}")
 }
-# comprueba si están definidos en odoo.conf y si lo están coge su valor
+# comprueba si están definidos en odoo.conf ($ODOO_RC, definido en el Dockerfile) y si lo están coge su valor
 check_config "db_host" "$HOST"
 check_config "db_port" "$PORT"
 check_config "db_user" "$USER"
