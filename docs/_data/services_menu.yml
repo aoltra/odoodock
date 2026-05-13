@@ -18,5 +18,3 @@
       link: /services/rabbitmq
     - name: debezium
       link: /services/debezium
-    - name: jekyll
-      link: /services/jekyll

@@ -70,6 +70,8 @@ hero_height: is-fullwidth
    $ ./up.sh
    ```
 
+### Versiones < 19
+
 10. Para comprobar que todo ha ido correctamente, acceder desde un navegador a _localhost:8069_, donde debe aparecer la página del selector de la base de datos.
 
      ![Selector base de datos](../../img/odoo_database_init.png)
@@ -81,3 +83,11 @@ hero_height: is-fullwidth
 12. Si todo ha ido correctamente, una vez finalizada la creación de la base de datos, deberá cargarse en el navegador la página _Aplicaciones_
 
     ![Aplicaciones](../../img/odoo_app_init.png)
+
+### Versiones > 19
+
+10. Aacceder desde un navegador a _localhost:8069_. Si todo ha ido correctamente, una vez finalizada la creación de la base de datos, deberá cargarse en el navegador la página _Aplicaciones_
+
+    ![Aplicaciones](../../img/odoo_app_init.png)
+
+> NOTA: A partir de la versión 19 de Odoo es posible automatizar más el proceso de instalación, con creación automática de la bbdd, clonación e instlación de módulos etc. Para más información,consulta la [información sobre el servicio](/odoodock/services/web). 

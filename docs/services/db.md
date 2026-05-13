@@ -29,13 +29,7 @@ Para crear nuevas bases de datos es necesario incluirlas en el fichero _.databas
    $ docker compose down
    ```
 
-2. Copiar el fichero _.databases-example_ a _.databases_
-
-   ```bash
-   $ cp .databases-example .databases
-   ```
-
-3. Modificar el fichero. Por ejemplo para añadir una base de datos para la gestión de Keycloak
+2. Modificar el fichero _.databases_. Por ejemplo para añadir una base de datos para la gestión de _Keycloak_
 
    ```text
    # lista de bases de datos:usuario:contraseña a crear en el contenedor

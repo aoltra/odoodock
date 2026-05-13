@@ -19,9 +19,15 @@ El servicio web es el que se encarga de arrancar odoo.
 
    > Parte de estas utilidades pueden ser arrancadas como contenedores docker. La decisión del método a utilizar depende del propósito del servicio.
 
-3. Ejecutar _./up.sh_ desde la carpeta _odoodock_.
+3. Versiones superiores o iguales a 19
 
-4. Abrir el navegador y acceder a la URL _http://locahost:8069_.
+   A partir de la versión 19, **odoodock** es capaz de crear y configurar de manera automática la base de datos, así como de clonar e instalar módulos por defecto. Dicha configuración se realiza desde el fichero _.env_, en los bloques _Inicialización de la base de datos_ y _Configuración de repositorios de módulos_
+
+   > Los bloques de _Inicialización de la base de datos_ y _Configuración de repositorios de módulos_ no son de aplicación en versiones inferiores a 19.
+
+4. Ejecutar _./up.sh_ desde la carpeta _odoodock_.
+
+5. Abrir el navegador y acceder a la URL _http://locahost:8069_.
 
 ### Utilidades
 
@@ -33,7 +39,6 @@ El servicio permite la instalación de herramientas adicionales de ayuda al desa
    ```
 
 > Nota: _[project_name]_ es el nombre del proyecto (variable _PROJECT_NAME_) definido en el fichero _.env_.
-
 
 #### Oh My ZSH
 
