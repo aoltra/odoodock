@@ -267,6 +267,52 @@ PYEOF
 }
 
 # ============================================================
+# FUNCIÓN: Instalar dependencias Python de los módulos
+# Busca requirements.txt en cada módulo de ADDONS_DIR y los instala
+# ============================================================
+install_python_requirements() {
+    echo "[entrypoint] 🐍 Buscando requirements.txt en módulos de ${ADDONS_DIR}..."
+
+    local found=0
+
+    # Buscar requirements.txt en la raíz de cada submódulo
+    for dir in "$ADDONS_DIR"/*/; do
+        local req_file="${dir}requirements.txt"
+        if [ -f "$req_file" ]; then
+            local module_name
+            module_name=$(basename "$dir")
+            echo "[entrypoint]   📄 Encontrado: ${req_file} (módulo: ${module_name})"
+            echo "[entrypoint]   Instalando dependencias Python de '${module_name}'..."
+            pip install --quiet --break-system-packages -r "$req_file" || {
+                echo "[entrypoint]   ❌ ERROR instalando requirements de '${module_name}'."
+                echo "[entrypoint]      Revisa ${req_file} y vuelve a intentarlo."
+                exit 1
+            }
+            echo "[entrypoint]   ✅ Dependencias de '${module_name}' instaladas."
+            found=$((found + 1))
+        fi
+    done
+
+    # Buscar también requirements.txt en la raíz de ADDONS_DIR
+    # (para repos que agrupan varios módulos con un requirements.txt común)
+    if [ -f "${ADDONS_DIR}/requirements.txt" ]; then
+        echo "[entrypoint]   📄 Encontrado: ${ADDONS_DIR}/requirements.txt (raíz de addons)"
+        pip install --quiet --break-system-packages -r "${ADDONS_DIR}/requirements.txt" || {
+            echo "[entrypoint]   ❌ ERROR instalando requirements de la raíz de addons."
+            exit 1
+        }
+        echo "[entrypoint]   ✅ Dependencias de la raíz de addons instaladas."
+        found=$((found + 1))
+    fi
+
+    if [ "$found" -eq 0 ]; then
+        echo "[entrypoint]   ℹ️ No se encontró ningún requirements.txt en los módulos."
+    else
+        echo "[entrypoint] ✅ Dependencias Python instaladas (${found} requirements.txt procesados)."
+    fi
+}
+
+# ============================================================
 # FUNCIÓN: Instalar módulos adicionales
 # ============================================================
 install_modules() {
@@ -376,17 +422,20 @@ if version_ge "$ODOO_VERSION" 19; then
         # 2. Clonar repositorios de módulos
         clone_repos
 
-        # 3. Crear e inicializar la base de datos (solo si no existe)
+        # 3. Instalar dependencias Python de los módulos (requirements.txt)
+        install_python_requirements
+
+        # 4. Crear e inicializar la base de datos (solo si no existe)
         if ! db_exists "$ODOO_DB_NAME"; then
             init_database
 
-            # 4. Instalar módulos adicionales
+            # 5. Instalar módulos adicionales
             install_modules
         else
             echo "[entrypoint] ℹ️ La base de datos '${ODOO_DB_NAME}' ya existe. Saltando inicialización."
         fi
 
-        # 5. Crear flag para no repetir en futuros reinicios
+        # 6. Crear flag para no repetir en futuros reinicios
         touch "$INIT_FLAG"
         echo "[entrypoint] ✅ Configuración inicial completada."
         echo "[entrypoint] =========================================================="
