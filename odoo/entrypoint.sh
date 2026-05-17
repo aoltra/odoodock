@@ -32,8 +32,30 @@ fi
 
 # Directorio donde se clonarán los repos (volumen mapeado a /mnt/extra-addons)
 ADDONS_DIR="/mnt/extra-addons"
+# Directorio donde se instalarán los paquetes Python de módulos Odoo (vía PIP)
+ODOO_PYTHON_PACKAGES="/var/lib/odoo/python-packages"
 # Flag para saber si ya se inicializó (persiste en el volumen de datos)
 INIT_FLAG="/var/lib/odoo/.odoo_initialized"
+
+# ==============================================================
+# FUNCIÓN: Configurar PYTHONPATH para módulos instalados vía PIP
+# ==============================================================
+# Los módulos Odoo instalados vía PIP (requirements-python-modules.txt)
+# se instalan en ODOO_PYTHON_PACKAGES. Añadimos este directorio al
+# PYTHONPATH para que Python pueda importar los paquetes.
+# ============================================================
+setup_pythonpath() {
+    # Crear el directorio si no existe
+    mkdir -p "$ODOO_PYTHON_PACKAGES"
+
+    # Añadir al PYTHONPATH actual (evitar duplicados)
+    if [[ ":$PYTHONPATH:" != *":$ODOO_PYTHON_PACKAGES:"* ]]; then
+        export PYTHONPATH="${ODOO_PYTHON_PACKAGES}${PYTHONPATH:+:$PYTHONPATH}"
+    fi
+
+    echo "[entrypoint] ✅ PYTHONPATH configurado: ${PYTHONPATH}"
+}
+
 
 # ============================================================
 # FUNCIÓN: Comparar dos versiones numéricas
@@ -310,6 +332,44 @@ install_python_requirements() {
     else
         echo "[entrypoint] ✅ Dependencias Python instaladas (${found} requirements.txt procesados)."
     fi
+
+    # Buscar requirements-python-modules.txt en la raíz de cada submódulo
+    # Estos son paquetes Python que son módulos de Odoo (ej: odoo-addon-auth-oidc).
+    # Se instalan en un directorio propio del usuario odoo para evitar
+    # problemas de permisos con /usr/lib/python3/dist-packages/.
+    # ============================================================
+
+    mkdir -p "$ODOO_PYTHON_PACKAGES"
+
+    # Asegurar que PYTHONPATH incluye el directorio de paquetes"
+
+    local found_python_modules=0
+    echo "[entrypoint] 🐍 Buscando requirements-python-modules.txt en módulos de ${ADDONS_DIR}..."
+
+    for dir in "$ADDONS_DIR"/*/; do
+        local req_file="${dir}requirements-python-modules.txt"
+        echo "[entrypoint] 🐍 Buscando en ${dir}..."
+
+        if [ -f "$req_file" ]; then
+            local module_name
+            module_name=$(basename "$dir")
+            echo "[entrypoint]   📄 Encontrado: ${req_file} (módulo: ${module_name})"
+            echo "[entrypoint]   Instalando módulos Odoo vía PIP de '${module_name}'..."
+            echo "[entrypoint]   Destino: ${ODOO_PYTHON_PACKAGES}"
+
+            # Instalar con --target en un directorio donde odoo tenga permisos
+            # --no-deps para evitar conflictos con paquetes del sistema
+            # --upgrade para sobrescribir versiones anteriores
+            pip install --quiet --break-system-packages --no-deps --target="$ODOO_PYTHON_PACKAGES" --upgrade -r "$req_file" || {
+                echo "[entrypoint]   ❌ ERROR instalando requirements-python-modules de '${module_name}'."
+                echo "[entrypoint]      Revisa ${req_file} y vuelve a intentarlo."
+                exit 1
+            }
+            echo "[entrypoint]   ✅ Módulos Odoo vía PIP '${module_name}' instalados."
+            found_python_modules=$((found_python_modules + 1))
+        fi
+    done
+
 }
 
 # ============================================================
@@ -326,7 +386,17 @@ install_modules() {
     echo "[entrypoint] =========================================================="
 
     # Construir addons-path incluyendo el directorio de addons extra
+    # y los módulos Odoo instalados vía PIP
     local addons_path="/usr/lib/python3/dist-packages/odoo/addons"
+
+    # Añadir módulos Odoo instalados vía PIP (requirements-python-modules.txt)
+    # Estos se instalan en ODOO_PYTHON_PACKAGES/odoo/addons/
+    local pip_addons_dir="${ODOO_PYTHON_PACKAGES}/odoo/addons"
+    if [ -d "$pip_addons_dir" ]; then
+        addons_path="${addons_path},${pip_addons_dir}"
+        echo "[entrypoint]   📦 Añadido al addons-path: ${pip_addons_dir}"
+    fi
+
     if [ -d "$ADDONS_DIR" ]; then
         # Añadir todos los subdirectorios de ADDONS_DIR que contengan __manifest__.py
         for dir in "$ADDONS_DIR"/*; do
@@ -405,6 +475,9 @@ EOF
 # BLOQUE PRINCIPAL: Lógica de inicialización
 # ============================================================
 
+# Configurar PYTHONPATH para módulos PIP antes de cualquier operación
+setup_pythonpath
+
 # Esperar a que PostgreSQL esté listo
 wait_for_postgres
 
@@ -456,4 +529,5 @@ fi
 # EJECUTAR ODOO (pasando a runodoo.sh)
 # ============================================================
 echo "[entrypoint] 🚀 Arrancando Odoo..."
+echo "[entrypoint]    PYTHONPATH: ${PYTHONPATH}"
 exec /runodoo.sh "$@"
