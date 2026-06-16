@@ -1,0 +1,8 @@
+# Entradas a añadir en /etc/hosts en la máquina host:
+
+127.0.0.1  odoo.local
+127.0.0.1  keycloak.local
+127.0.0.1  pgadmin.local
+127.0.0.1  moodle.local
+127.0.0.1  rabbitmq.local
+127.0.0.1  n8n.local

@@ -140,6 +140,12 @@ services:
     networks:
       - traefik_network
 
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.odoo.rule=Host(`odoo.local`)"
+      - "traefik.http.routers.odoo.entrypoints=web"
+      - "traefik.http.services.odoo.loadbalancer.server.port=8069"
+
     deploy:
       restart_policy:
         condition: any
@@ -203,6 +209,12 @@ services:
 
     volumes:
       - pgadmin_data:/var/lib/pgadmin
+  
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pgadmin.rule=Host(`pgadmin.local`)"
+      - "traefik.http.routers.pgadmin.entrypoints=web"
+      - "traefik.http.services.pgadmin.loadbalancer.server.port=80"
 
     # Indicamos que depende de "db", por lo cual debe ser procesada primero "db"
     depends_on:
@@ -282,18 +294,18 @@ services:
     # para ser enrutado desde traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.n8n.rule=Host(`${SUBDOMAIN}.${DOMAIN_NAME}`)"
+      - "traefik.http.routers.n8n.rule=Host(`${N8N_SUBDOMAIN}.${N8N_DOMAIN}`)"
       - "traefik.http.routers.n8n.entrypoints=web"
       - "traefik.http.services.n8n.loadbalancer.server.port=5678"
 
     environment:
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
-      - N8N_HOST=${SUBDOMAIN}.${DOMAIN_NAME}
+      - N8N_HOST=${N8N_SUBDOMAIN}.${N8N_DOMAIN}
       - N8N_PORT=${N8N_PORT}
       - N8N_PROTOCOL=http
       - N8N_RUNNERS_ENABLED=true
       - NODE_ENV=development
-      - WEBHOOK_URL=http://${SUBDOMAIN}.${DOMAIN_NAME}/
+      - WEBHOOK_URL=http://${N8N_SUBDOMAIN}.${N8N_DOMAIN}/
       - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
       - TZ=${GENERIC_TIMEZONE}
       - NODES_EXCLUDE="[]"
@@ -354,6 +366,7 @@ services:
   #############################
   traefik:
     image: traefik:v3.0
+    restart: unless-stopped
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"
@@ -361,10 +374,11 @@ services:
       - "--entrypoints.web.address=:80"
     ports:
       - "80:80"
-      - "8080:8080" # Dashboard de Traefik
+      - "${TRAEFIK_DASHBOARD_PORT:-8888}:8080" # Dashboard de Traefik
 
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
 
     networks:
       - traefik_network

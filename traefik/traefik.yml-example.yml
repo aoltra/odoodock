@@ -1,0 +1,26 @@
+# Configura el comportamiento global de Traefik.
+# Las rutas de cada servicio se definen mediante labels en
+# docker-compose.yml (provider: docker).
+
+
+api:
+  dashboard: true
+  insecure: true  # Dashboard accesible sin auth en http://localhost:8888
+                  # Cambiar a false y añadir middleware auth en producción
+
+entryPoints:
+  web:
+    address: ":80"
+  # con SSL
+  # websecure:
+  #   address: ":443"
+
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false     # Solo exponer servicios con traefik.enable=true
+    network: traefik_network
+
+log:
+  level: INFO
