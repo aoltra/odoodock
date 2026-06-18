@@ -4,14 +4,16 @@
       link: /services/web
     - name: db (postgres)
       link: /services/db
+    - name: keycloak
+      link: /services/keycloak
     - name: pgadmin
       link: /services/pgadmin
     - name: moodle
       link: /services/moodle
     - name: mariadb-moodle
       link: /services/mariadb-moodle
-    - name: keycloak
-      link: /services/keycloak
+    - name: traefik
+      link: /services/traefik
     - name: n8n
       link: /services/n8n
     - name: rabbitmq
